@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:sensor_api/domain/entities/sensor_data.dart';
+import 'package:sensor_api/domain/entities/additional_sensors.dart';
 import 'package:sensor_api/domain/usecases/get_sensor_data.dart';
 
 class ApiServer {
@@ -15,6 +16,17 @@ class ApiServer {
   final GetPressureDataUseCase getPressureData;
   final GetCombinedSensorDataUseCase getCombinedSensorData;
   final GetAvailableSensorsUseCase getAvailableSensors;
+
+  // Additional sensor use cases
+  final GetStepCounterDataUseCase? getStepCounterData;
+  final GetStepDetectorDataUseCase? getStepDetectorData;
+  final GetRotationVectorDataUseCase? getRotationVectorData;
+  final GetOrientationDataUseCase? getOrientationData;
+  final GetGravityDataUseCase? getGravityData;
+  final GetLinearAccelerationDataUseCase? getLinearAccelerationData;
+  final GetGameRotationVectorDataUseCase? getGameRotationVectorData;
+  final GetGeomagneticRotationVectorDataUseCase?
+  getGeomagneticRotationVectorData;
 
   HttpServer? _server;
   String _host = '0.0.0.0';
@@ -29,6 +41,14 @@ class ApiServer {
     required this.getPressureData,
     required this.getCombinedSensorData,
     required this.getAvailableSensors,
+    this.getStepCounterData,
+    this.getStepDetectorData,
+    this.getRotationVectorData,
+    this.getOrientationData,
+    this.getGravityData,
+    this.getLinearAccelerationData,
+    this.getGameRotationVectorData,
+    this.getGeomagneticRotationVectorData,
   });
 
   Future<void> start({String? host, int? port}) async {
@@ -103,6 +123,90 @@ class ApiServer {
         } else if (path == 'pressure') {
           final data = await getPressureData();
           return _jsonResponse(true, 'Success', data?.toJson());
+        } else if (path == 'stepcounter') {
+          if (getStepCounterData != null) {
+            final data = await getStepCounterData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Step counter sensor not supported',
+              null,
+            );
+          }
+        } else if (path == 'stepdetector') {
+          if (getStepDetectorData != null) {
+            final data = await getStepDetectorData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Step detector sensor not supported',
+              null,
+            );
+          }
+        } else if (path == 'rotationvector') {
+          if (getRotationVectorData != null) {
+            final data = await getRotationVectorData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Rotation vector sensor not supported',
+              null,
+            );
+          }
+        } else if (path == 'orientation') {
+          if (getOrientationData != null) {
+            final data = await getOrientationData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Orientation sensor not supported',
+              null,
+            );
+          }
+        } else if (path == 'gravity') {
+          if (getGravityData != null) {
+            final data = await getGravityData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(false, 'Gravity sensor not supported', null);
+          }
+        } else if (path == 'linearacceleration') {
+          if (getLinearAccelerationData != null) {
+            final data = await getLinearAccelerationData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Linear acceleration sensor not supported',
+              null,
+            );
+          }
+        } else if (path == 'gamerotationvector') {
+          if (getGameRotationVectorData != null) {
+            final data = await getGameRotationVectorData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Game rotation vector sensor not supported',
+              null,
+            );
+          }
+        } else if (path == 'geomagneticrotationvector') {
+          if (getGeomagneticRotationVectorData != null) {
+            final data = await getGeomagneticRotationVectorData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Geomagnetic rotation vector sensor not supported',
+              null,
+            );
+          }
         } else if (path == 'all') {
           final data = await getCombinedSensorData();
           return _jsonResponse(true, 'Success', data.toJson());

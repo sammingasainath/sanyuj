@@ -3,8 +3,36 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:network_info_plus/network_info_plus.dart';
+import 'package:sensor_api/data/datasources/platform_sensor_datasource.dart';
+import 'package:sensor_api/domain/entities/additional_sensors.dart';
 import 'package:sensor_api/presentation/providers/sensor_provider.dart';
+import 'package:sensor_api/presentation/widgets/sensor_card_widget.dart';
+import 'package:sensor_api/presentation/widgets/sensor_group_widget.dart';
+import 'package:sensor_api/presentation/widgets/server_config_widget.dart';
+import 'package:sensor_api/presentation/widgets/endpoints_list_widget.dart';
 import 'package:sensor_api/presentation/widgets/sensor_value_widget.dart';
+
+// Providers to check if sensors are simulated or real
+final isProximitySimulatedProvider = Provider<bool>((ref) {
+  final sensorDataSource = ref.watch(sensorDataSourceProvider);
+  return sensorDataSource is PlatformSensorDataSource
+      ? !(sensorDataSource as PlatformSensorDataSource).isProximityRealData()
+      : true;
+});
+
+final isLightSimulatedProvider = Provider<bool>((ref) {
+  final sensorDataSource = ref.watch(sensorDataSourceProvider);
+  return sensorDataSource is PlatformSensorDataSource
+      ? !(sensorDataSource as PlatformSensorDataSource).isLightRealData()
+      : true;
+});
+
+final isPressureWorkingProvider = Provider<bool>((ref) {
+  final sensorDataSource = ref.watch(sensorDataSourceProvider);
+  return sensorDataSource is PlatformSensorDataSource
+      ? (sensorDataSource as PlatformSensorDataSource).isPressureWorking()
+      : false;
+});
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -79,13 +107,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }
 
   Widget _buildSensorsTab() {
-    final accelerometerData = ref.watch(accelerometerStreamProvider);
-    final gyroscopeData = ref.watch(gyroscopeStreamProvider);
-    final magnetometerData = ref.watch(magnetometerStreamProvider);
-    final proximityData = ref.watch(proximityStreamProvider);
-    final lightData = ref.watch(lightStreamProvider);
-    final pressureData = ref.watch(pressureStreamProvider);
-
     return RefreshIndicator(
       onRefresh: () async {
         ref.refresh(accelerometerStreamProvider);
@@ -94,6 +115,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         ref.refresh(proximityStreamProvider);
         ref.refresh(lightStreamProvider);
         ref.refresh(pressureStreamProvider);
+        ref.refresh(rotationVectorStreamProvider);
+        ref.refresh(orientationStreamProvider);
+        ref.refresh(gravityStreamProvider);
+        ref.refresh(linearAccelerationStreamProvider);
+        ref.refresh(stepCounterStreamProvider);
+        ref.refresh(stepDetectorStreamProvider);
       },
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -101,428 +128,163 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Motion Sensors',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            // Accelerometer Card
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.speed),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Accelerometer',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Spacer(),
-                        accelerometerData.when(
-                          data:
-                              (_) => const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                                size: 16,
-                              ),
-                          loading:
-                              () => const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                          error:
-                              (_, __) => const Icon(
-                                Icons.error,
-                                color: Colors.red,
-                                size: 16,
-                              ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    accelerometerData.when(
-                      data:
-                          (data) => SensorValueWidget(
-                            x: data.x,
-                            y: data.y,
-                            z: data.z,
-                          ),
-                      loading:
-                          () =>
-                              const Center(child: CircularProgressIndicator()),
-                      error:
-                          (error, _) => Text(
-                            'Error: $error',
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            // Gyroscope Card
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.rotate_90_degrees_ccw),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Gyroscope',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Spacer(),
-                        gyroscopeData.when(
-                          data:
-                              (_) => const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                                size: 16,
-                              ),
-                          loading:
-                              () => const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                          error:
-                              (_, __) => const Icon(
-                                Icons.error,
-                                color: Colors.red,
-                                size: 16,
-                              ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    gyroscopeData.when(
-                      data:
-                          (data) => SensorValueWidget(
-                            x: data.x,
-                            y: data.y,
-                            z: data.z,
-                          ),
-                      loading:
-                          () =>
-                              const Center(child: CircularProgressIndicator()),
-                      error:
-                          (error, _) => Text(
-                            'Error: $error',
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            // Magnetometer Card
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.explore),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Magnetometer',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Spacer(),
-                        magnetometerData.when(
-                          data:
-                              (_) => const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                                size: 16,
-                              ),
-                          loading:
-                              () => const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                          error:
-                              (_, __) => const Icon(
-                                Icons.error,
-                                color: Colors.red,
-                                size: 16,
-                              ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    magnetometerData.when(
-                      data:
-                          (data) => SensorValueWidget(
-                            x: data.x,
-                            y: data.y,
-                            z: data.z,
-                          ),
-                      loading:
-                          () =>
-                              const Center(child: CircularProgressIndicator()),
-                      error:
-                          (error, _) => Text(
-                            'Error: $error',
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Environmental Sensors',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            // Proximity Card
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.sensors),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Proximity',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Spacer(),
-                        const Text(
-                          'Simulated',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontStyle: FontStyle.italic,
-                            color: Colors.orange,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        proximityData.when(
-                          data:
-                              (_) => const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                                size: 16,
-                              ),
-                          loading:
-                              () => const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                          error:
-                              (_, __) => const Icon(
-                                Icons.error,
-                                color: Colors.red,
-                                size: 16,
-                              ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    proximityData.when(
-                      data:
-                          (data) => ProximityValueWidget(
-                            distance: data.distance,
-                            isNear: data.isNear,
-                          ),
-                      loading:
-                          () =>
-                              const Center(child: CircularProgressIndicator()),
-                      error:
-                          (error, _) => Text(
-                            'Proximity sensor not available',
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            // Light Sensor Card
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.light_mode),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Light Sensor',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Spacer(),
-                        const Text(
-                          'Simulated',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontStyle: FontStyle.italic,
-                            color: Colors.orange,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        lightData.when(
-                          data:
-                              (_) => const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                                size: 16,
-                              ),
-                          loading:
-                              () => const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                          error:
-                              (_, __) => const Icon(
-                                Icons.error,
-                                color: Colors.red,
-                                size: 16,
-                              ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    lightData.when(
-                      data:
-                          (data) =>
-                              LightValueWidget(illuminance: data.illuminance),
-                      loading:
-                          () =>
-                              const Center(child: CircularProgressIndicator()),
-                      error:
-                          (error, _) => Text(
-                            'Light sensor not available',
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            // Pressure Sensor Card
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.compress),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Pressure Sensor',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Spacer(),
-                        const Text(
-                          'Simulated',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontStyle: FontStyle.italic,
-                            color: Colors.orange,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        pressureData.when(
-                          data:
-                              (_) => const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                                size: 16,
-                              ),
-                          loading:
-                              () => const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                          error:
-                              (_, __) => const Icon(
-                                Icons.error,
-                                color: Colors.red,
-                                size: 16,
-                              ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    pressureData.when(
-                      data:
-                          (data) =>
-                              PressureValueWidget(pressure: data.pressure),
-                      loading:
-                          () =>
-                              const Center(child: CircularProgressIndicator()),
-                      error:
-                          (error, _) => Text(
-                            'Pressure sensor not available',
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            _buildMotionSensorsGroup(),
+            _buildEnvironmentalSensorsGroup(),
+            _buildPositionSensorsGroup(),
+            _buildActivitySensorsGroup(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildMotionSensorsGroup() {
+    final accelerometerData = ref.watch(accelerometerStreamProvider);
+    final gyroscopeData = ref.watch(gyroscopeStreamProvider);
+    final magnetometerData = ref.watch(magnetometerStreamProvider);
+
+    return SensorGroupWidget(
+      title: 'Motion Sensors',
+      sensorCards: [
+        SensorCardWidget(
+          title: 'Accelerometer',
+          icon: Icons.speed,
+          sensorData: accelerometerData,
+          valueBuilder:
+              (data) => SensorValueWidget(x: data.x, y: data.y, z: data.z),
+        ),
+        const SizedBox(height: 10),
+        SensorCardWidget(
+          title: 'Gyroscope',
+          icon: Icons.rotate_90_degrees_ccw,
+          sensorData: gyroscopeData,
+          valueBuilder:
+              (data) => SensorValueWidget(x: data.x, y: data.y, z: data.z),
+        ),
+        const SizedBox(height: 10),
+        SensorCardWidget(
+          title: 'Magnetometer',
+          icon: Icons.explore,
+          sensorData: magnetometerData,
+          valueBuilder:
+              (data) => SensorValueWidget(x: data.x, y: data.y, z: data.z),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEnvironmentalSensorsGroup() {
+    final proximityData = ref.watch(proximityStreamProvider);
+    final lightData = ref.watch(lightStreamProvider);
+    final pressureData = ref.watch(pressureStreamProvider);
+
+    return SensorGroupWidget(
+      title: 'Environmental Sensors',
+      sensorCards: [
+        SensorCardWidget(
+          title: 'Proximity',
+          icon: Icons.sensors,
+          sensorData: proximityData,
+          valueBuilder:
+              (data) => ProximityValueWidget(
+                distance: data.distance,
+                isNear: data.isNear,
+              ),
+        ),
+        const SizedBox(height: 10),
+        SensorCardWidget(
+          title: 'Light Sensor',
+          icon: Icons.light_mode,
+          sensorData: lightData,
+          valueBuilder:
+              (data) => LightValueWidget(illuminance: data.illuminance),
+        ),
+        const SizedBox(height: 10),
+        SensorCardWidget(
+          title: 'Pressure Sensor',
+          icon: Icons.compress,
+          sensorData: pressureData,
+          valueBuilder: (data) => PressureValueWidget(pressure: data.pressure),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPositionSensorsGroup() {
+    final orientationData = ref.watch(orientationStreamProvider);
+    final rotationVectorData = ref.watch(rotationVectorStreamProvider);
+    final gravityData = ref.watch(gravityStreamProvider);
+
+    return SensorGroupWidget(
+      title: 'Position Sensors',
+      sensorCards: [
+        SensorCardWidget(
+          title: 'Orientation',
+          icon: Icons.screen_rotation,
+          sensorData: orientationData,
+          valueBuilder:
+              (data) => OrientationValueWidget(
+                azimuth: data.azimuth,
+                pitch: data.pitch,
+                roll: data.roll,
+              ),
+        ),
+        const SizedBox(height: 10),
+        SensorCardWidget(
+          title: 'Rotation Vector',
+          icon: Icons.rotate_right,
+          sensorData: rotationVectorData,
+          valueBuilder:
+              (data) => RotationVectorValueWidget(
+                x: data.x,
+                y: data.y,
+                z: data.z,
+                w: data.w,
+              ),
+        ),
+        const SizedBox(height: 10),
+        SensorCardWidget(
+          title: 'Gravity',
+          icon: Icons.arrow_downward,
+          sensorData: gravityData,
+          valueBuilder:
+              (data) => SensorValueWidget(x: data.x, y: data.y, z: data.z),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActivitySensorsGroup() {
+    final stepCounterData = ref.watch(stepCounterStreamProvider);
+    final stepDetectorData = ref.watch(stepDetectorStreamProvider);
+    final linearAccelerationData = ref.watch(linearAccelerationStreamProvider);
+
+    return SensorGroupWidget(
+      title: 'Activity Sensors',
+      sensorCards: [
+        SensorCardWidget(
+          title: 'Step Counter',
+          icon: Icons.directions_walk,
+          sensorData: stepCounterData,
+          valueBuilder: (data) => StepCounterValueWidget(steps: data.steps),
+        ),
+        const SizedBox(height: 10),
+        SensorCardWidget(
+          title: 'Step Detector',
+          icon: Icons.directions_run,
+          sensorData: stepDetectorData,
+          valueBuilder:
+              (data) => StepDetectorValueWidget(detected: data.detected),
+        ),
+        const SizedBox(height: 10),
+        SensorCardWidget(
+          title: 'Linear Acceleration',
+          icon: Icons.speed,
+          sensorData: linearAccelerationData,
+          valueBuilder:
+              (data) => SensorValueWidget(x: data.x, y: data.y, z: data.z),
+        ),
+      ],
     );
   }
 
@@ -536,7 +298,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildServerSection(isServerRunning, serverPort),
+          ServerConfigWidget(
+            portController: _portController,
+            isServerRunning: isServerRunning,
+            toggleServer: _toggleServer,
+          ),
           const SizedBox(height: 20),
           const Text(
             'Available Sensor Endpoints',
@@ -556,10 +322,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                             Icon(
                               Icons.check_circle,
                               size: 16,
-                              color:
-                                  sensor.contains('simulated')
-                                      ? Colors.orange
-                                      : Colors.green,
+                              color: Colors.green,
                             ),
                             SizedBox(width: 8),
                             Text(sensor),
@@ -572,9 +335,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       children: [
                         Icon(Icons.check_circle, size: 16, color: Colors.blue),
                         SizedBox(width: 8),
-                        Text(
-                          'all (combined data - includes simulated sensors)',
-                        ),
+                        Text('all (combined data)'),
                       ],
                     ),
                   ],
@@ -582,157 +343,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (error, _) => Text('Error loading sensors: $error'),
           ),
+          EndpointsListWidget(
+            isServerRunning: isServerRunning,
+            ipAddress: _ip,
+            serverPort: serverPort,
+            availableSensors: availableSensors,
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildServerSection(bool isServerRunning, int serverPort) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  isServerRunning ? Icons.cloud_done : Icons.cloud_off,
-                  color: isServerRunning ? Colors.green : Colors.red,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  isServerRunning ? 'Server Running' : 'Server Stopped',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: isServerRunning ? Colors.green : Colors.red,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _portController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Port',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.settings_ethernet),
-                    ),
-                    enabled: !isServerRunning,
-                    onChanged: (value) {
-                      final port = int.tryParse(value);
-                      if (port != null) {
-                        ref.read(serverPortProvider.notifier).state = port;
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(width: 10),
-                FilledButton.icon(
-                  onPressed: isServerRunning ? null : () => _toggleServer(true),
-                  icon: const Icon(Icons.play_arrow),
-                  label: const Text('Start'),
-                ),
-                const SizedBox(width: 10),
-                OutlinedButton.icon(
-                  onPressed:
-                      isServerRunning ? () => _toggleServer(false) : null,
-                  icon: const Icon(Icons.stop),
-                  label: const Text('Stop'),
-                ),
-              ],
-            ),
-            if (isServerRunning && _ip != null) ...[
-              const SizedBox(height: 20),
-              const Text(
-                'API Endpoints:',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              _buildEndpointCard(
-                'Sensors List',
-                'http://$_ip:$serverPort/sensors',
-              ),
-              _buildEndpointCard(
-                'Accelerometer Data',
-                'http://$_ip:$serverPort/accelerometer',
-              ),
-              _buildEndpointCard(
-                'Gyroscope Data',
-                'http://$_ip:$serverPort/gyroscope',
-              ),
-              _buildEndpointCard(
-                'Magnetometer Data',
-                'http://$_ip:$serverPort/magnetometer',
-              ),
-              _buildEndpointCard(
-                'Proximity Data (Simulated)',
-                'http://$_ip:$serverPort/proximity',
-              ),
-              _buildEndpointCard(
-                'Light Sensor Data (Simulated)',
-                'http://$_ip:$serverPort/light',
-              ),
-              _buildEndpointCard(
-                'Pressure Data (Simulated)',
-                'http://$_ip:$serverPort/pressure',
-              ),
-              _buildEndpointCard(
-                'All Sensor Data (Combined)',
-                'http://$_ip:$serverPort/all',
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEndpointCard(String title, String url) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      elevation: 0,
-      color: Colors.grey[100],
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                Expanded(
-                  child: SelectableText(
-                    url,
-                    style: TextStyle(
-                      fontFamily: 'monospace',
-                      fontSize: 12,
-                      color: Colors.blue[800],
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.copy, size: 16),
-                  onPressed: () {
-                    // Copy to clipboard
-                  },
-                  constraints: const BoxConstraints(),
-                  padding: EdgeInsets.zero,
-                  visualDensity: VisualDensity.compact,
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }

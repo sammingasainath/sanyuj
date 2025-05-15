@@ -1,56 +1,16 @@
 import 'dart:async';
 
+import 'package:logging/logging.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:sensor_api/domain/entities/sensor_data.dart';
 import 'package:sensor_api/domain/entities/additional_sensors.dart';
-import 'package:flutter/services.dart';
-import 'package:logging/logging.dart';
 
-abstract class SensorDataSource {
-  // Basic sensors
-  Stream<AccelerometerData> getAccelerometerStream();
-  Stream<GyroscopeData> getGyroscopeStream();
-  Stream<MagnetometerData> getMagnetometerStream();
-  Stream<ProximityData> getProximityStream();
-  Stream<LightSensorData> getLightStream();
-  Stream<PressureData> getPressureStream();
+import 'sensor_datasource.dart';
 
-  // Additional sensors
-  Stream<StepCounterData> getStepCounterStream();
-  Stream<StepDetectorData> getStepDetectorStream();
-  Stream<RotationVectorData> getRotationVectorStream();
-  Stream<OrientationData> getOrientationStream();
-  Stream<GravityData> getGravityStream();
-  Stream<LinearAccelerationData> getLinearAccelerationStream();
-  Stream<GameRotationVectorData> getGameRotationVectorStream();
-  Stream<GeomagneticRotationVectorData> getGeomagneticRotationVectorStream();
+class SensorPlusImprovedDataSource implements SensorDataSource {
+  final Logger _logger = Logger('SensorPlusImprovedDataSource');
 
-  // One-time fetch methods for basic sensors
-  Future<AccelerometerData> getAccelerometerData();
-  Future<GyroscopeData> getGyroscopeData();
-  Future<MagnetometerData> getMagnetometerData();
-  Future<ProximityData?> getProximityData();
-  Future<LightSensorData?> getLightData();
-  Future<PressureData?> getPressureData();
-
-  // One-time fetch methods for additional sensors
-  Future<StepCounterData?> getStepCounterData();
-  Future<StepDetectorData?> getStepDetectorData();
-  Future<RotationVectorData?> getRotationVectorData();
-  Future<OrientationData?> getOrientationData();
-  Future<GravityData?> getGravityData();
-  Future<LinearAccelerationData?> getLinearAccelerationData();
-  Future<GameRotationVectorData?> getGameRotationVectorData();
-  Future<GeomagneticRotationVectorData?> getGeomagneticRotationVectorData();
-
-  // Combined data methods
-  Future<CombinedSensorData> getCombinedSensorData();
-  Future<List<String>> getAvailableSensors();
-}
-
-class SensorPlusDataSource implements SensorDataSource {
-  final Logger _logger = Logger('SensorPlusDataSource');
-
+  // Store streams controllers for sensors not available in sensors_plus
   final StreamController<ProximityData> _proximityController =
       StreamController<ProximityData>.broadcast();
   final StreamController<LightSensorData> _lightController =
@@ -58,35 +18,12 @@ class SensorPlusDataSource implements SensorDataSource {
   final StreamController<PressureData> _pressureController =
       StreamController<PressureData>.broadcast();
 
-  // Store subscription references to cancel on dispose
-  StreamSubscription? _proximitySubscription;
-  StreamSubscription? _lightSubscription;
-  StreamSubscription? _pressureSubscription;
-
-  // Mock values for unavailable sensors
-  final ProximityData _mockProximityData = ProximityData(
-    distance: 5.0,
-    isNear: false,
-    timestamp: DateTime.now(),
-    tenantId: 'default',
-  );
-
-  final LightSensorData _mockLightData = LightSensorData(
-    illuminance: 250.0,
-    timestamp: DateTime.now(),
-    tenantId: 'default',
-  );
-
-  final PressureData _mockPressureData = PressureData(
-    pressure: 1013.25,
-    timestamp: DateTime.now(),
-    tenantId: 'default',
-  );
-
   // Track which sensors are available
   bool _accelerometerAvailable = false;
   bool _gyroscopeAvailable = false;
   bool _magnetometerAvailable = false;
+
+  // Mock sensors (not available in sensors_plus)
   bool _proximityAvailable = false;
   bool _lightAvailable = false;
   bool _pressureAvailable = false;
@@ -96,9 +33,9 @@ class SensorPlusDataSource implements SensorDataSource {
   LightSensorData? _lastLightData;
   PressureData? _lastPressureData;
 
-  SensorPlusDataSource() {
+  SensorPlusImprovedDataSource() {
     _checkAvailableSensors();
-    _startMockStreamsIfNeeded();
+    _startMockStreamsForUnsupportedSensors();
   }
 
   Future<void> _checkAvailableSensors() async {
@@ -107,7 +44,8 @@ class SensorPlusDataSource implements SensorDataSource {
         const Duration(milliseconds: 500),
       );
       _accelerometerAvailable = true;
-    } catch (_) {
+    } catch (e) {
+      _logger.warning('Accelerometer not available: $e');
       _accelerometerAvailable = false;
     }
 
@@ -116,7 +54,8 @@ class SensorPlusDataSource implements SensorDataSource {
         const Duration(milliseconds: 500),
       );
       _gyroscopeAvailable = true;
-    } catch (_) {
+    } catch (e) {
+      _logger.warning('Gyroscope not available: $e');
       _gyroscopeAvailable = false;
     }
 
@@ -125,12 +64,12 @@ class SensorPlusDataSource implements SensorDataSource {
         const Duration(milliseconds: 500),
       );
       _magnetometerAvailable = true;
-    } catch (_) {
+    } catch (e) {
+      _logger.warning('Magnetometer not available: $e');
       _magnetometerAvailable = false;
     }
 
-    // For proximity, light, and pressure sensors, we'll assume they're not available
-    // and use mock data since we removed flutter_sensors
+    // These sensors are not supported by sensors_plus, so we'll simulate them
     _proximityAvailable = false;
     _lightAvailable = false;
     _pressureAvailable = false;
@@ -144,54 +83,60 @@ class SensorPlusDataSource implements SensorDataSource {
     _logger.info('- Pressure: $_pressureAvailable (simulated)');
   }
 
-  void _startMockStreamsIfNeeded() {
-    // Always start mock streams for proximity, light, and pressure
-    // since we removed flutter_sensors
+  void _startMockStreamsForUnsupportedSensors() {
+    // Start mock streams for proximity, light, and pressure sensors
+    _startMockProximityStream();
+    _startMockLightStream();
+    _startMockPressureStream();
+  }
+
+  void _startMockProximityStream() {
     _logger.info('Starting mock proximity stream');
-    Timer.periodic(const Duration(seconds: 5), (timer) {
+    Timer.periodic(const Duration(seconds: 2), (timer) {
       final bool isNear =
           DateTime.now().second % 10 < 5; // Simulate proximity changes
-      final mockData = ProximityData(
+      final data = ProximityData(
         distance: isNear ? 0.0 : 5.0,
         isNear: isNear,
         timestamp: DateTime.now(),
         tenantId: 'default',
       );
-      _lastProximityData = mockData;
-      _proximityController.add(mockData);
+      _lastProximityData = data;
+      _proximityController.add(data);
     });
+  }
 
+  void _startMockLightStream() {
     _logger.info('Starting mock light sensor stream');
     Timer.periodic(const Duration(seconds: 3), (timer) {
       final base = 200.0;
       final variation = (DateTime.now().second % 60) * 10.0;
-      final mockData = LightSensorData(
+      final data = LightSensorData(
         illuminance: base + variation,
         timestamp: DateTime.now(),
         tenantId: 'default',
       );
-      _lastLightData = mockData;
-      _lightController.add(mockData);
+      _lastLightData = data;
+      _lightController.add(data);
     });
+  }
 
+  void _startMockPressureStream() {
     _logger.info('Starting mock pressure stream');
-    Timer.periodic(const Duration(seconds: 7), (timer) {
+    Timer.periodic(const Duration(seconds: 5), (timer) {
       final base = 1013.0;
       final variation = (DateTime.now().minute % 10) * 0.5;
-      final mockData = PressureData(
+      final data = PressureData(
         pressure: base + variation,
         timestamp: DateTime.now(),
         tenantId: 'default',
       );
-      _lastPressureData = mockData;
-      _pressureController.add(mockData);
+      _lastPressureData = data;
+      _pressureController.add(data);
     });
   }
 
   void dispose() {
-    _proximitySubscription?.cancel();
-    _lightSubscription?.cancel();
-    _pressureSubscription?.cancel();
     _proximityController.close();
     _lightController.close();
     _pressureController.close();
@@ -199,41 +144,92 @@ class SensorPlusDataSource implements SensorDataSource {
 
   @override
   Stream<AccelerometerData> getAccelerometerStream() {
-    return accelerometerEventStream().map(
-      (event) => AccelerometerData(
-        x: event.x,
-        y: event.y,
-        z: event.z,
-        timestamp: DateTime.now(),
-        tenantId: 'default',
-      ),
-    );
+    if (_accelerometerAvailable) {
+      return accelerometerEventStream().map(
+        (event) => AccelerometerData(
+          x: event.x,
+          y: event.y,
+          z: event.z,
+          timestamp: DateTime.now(),
+          tenantId: 'default',
+        ),
+      );
+    } else {
+      // Return empty stream if sensor is not available
+      final controller = StreamController<AccelerometerData>.broadcast();
+      Timer.periodic(const Duration(milliseconds: 200), (timer) {
+        controller.add(
+          AccelerometerData(
+            x: 0.5 * DateTime.now().second % 10,
+            y: 1.5 * DateTime.now().second % 5,
+            z: 9.8 + 0.1 * (DateTime.now().millisecond % 10),
+            timestamp: DateTime.now(),
+            tenantId: 'default',
+          ),
+        );
+      });
+      return controller.stream;
+    }
   }
 
   @override
   Stream<GyroscopeData> getGyroscopeStream() {
-    return gyroscopeEventStream().map(
-      (event) => GyroscopeData(
-        x: event.x,
-        y: event.y,
-        z: event.z,
-        timestamp: DateTime.now(),
-        tenantId: 'default',
-      ),
-    );
+    if (_gyroscopeAvailable) {
+      return gyroscopeEventStream().map(
+        (event) => GyroscopeData(
+          x: event.x,
+          y: event.y,
+          z: event.z,
+          timestamp: DateTime.now(),
+          tenantId: 'default',
+        ),
+      );
+    } else {
+      // Return mock stream if sensor is not available
+      final controller = StreamController<GyroscopeData>.broadcast();
+      Timer.periodic(const Duration(milliseconds: 200), (timer) {
+        controller.add(
+          GyroscopeData(
+            x: 0.01 * DateTime.now().second % 10,
+            y: 0.02 * DateTime.now().second % 5,
+            z: 0.03 * (DateTime.now().millisecond % 10),
+            timestamp: DateTime.now(),
+            tenantId: 'default',
+          ),
+        );
+      });
+      return controller.stream;
+    }
   }
 
   @override
   Stream<MagnetometerData> getMagnetometerStream() {
-    return magnetometerEventStream().map(
-      (event) => MagnetometerData(
-        x: event.x,
-        y: event.y,
-        z: event.z,
-        timestamp: DateTime.now(),
-        tenantId: 'default',
-      ),
-    );
+    if (_magnetometerAvailable) {
+      return magnetometerEventStream().map(
+        (event) => MagnetometerData(
+          x: event.x,
+          y: event.y,
+          z: event.z,
+          timestamp: DateTime.now(),
+          tenantId: 'default',
+        ),
+      );
+    } else {
+      // Return mock stream if sensor is not available
+      final controller = StreamController<MagnetometerData>.broadcast();
+      Timer.periodic(const Duration(milliseconds: 200), (timer) {
+        controller.add(
+          MagnetometerData(
+            x: 25 + 5 * DateTime.now().second % 10,
+            y: 40 + 3 * DateTime.now().second % 5,
+            z: 10 + 2 * (DateTime.now().millisecond % 10),
+            timestamp: DateTime.now(),
+            tenantId: 'default',
+          ),
+        );
+      });
+      return controller.stream;
+    }
   }
 
   @override
@@ -253,74 +249,92 @@ class SensorPlusDataSource implements SensorDataSource {
 
   @override
   Future<AccelerometerData> getAccelerometerData() async {
-    final event = await accelerometerEventStream().first;
-    return AccelerometerData(
-      x: event.x,
-      y: event.y,
-      z: event.z,
-      timestamp: DateTime.now(),
-      tenantId: 'default',
-    );
+    if (_accelerometerAvailable) {
+      final event = await accelerometerEventStream().first;
+      return AccelerometerData(
+        x: event.x,
+        y: event.y,
+        z: event.z,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      );
+    } else {
+      return AccelerometerData(
+        x: 0.5,
+        y: 1.5,
+        z: 9.8,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      );
+    }
   }
 
   @override
   Future<GyroscopeData> getGyroscopeData() async {
-    final event = await gyroscopeEventStream().first;
-    return GyroscopeData(
-      x: event.x,
-      y: event.y,
-      z: event.z,
-      timestamp: DateTime.now(),
-      tenantId: 'default',
-    );
+    if (_gyroscopeAvailable) {
+      final event = await gyroscopeEventStream().first;
+      return GyroscopeData(
+        x: event.x,
+        y: event.y,
+        z: event.z,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      );
+    } else {
+      return GyroscopeData(
+        x: 0.01,
+        y: 0.02,
+        z: 0.03,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      );
+    }
   }
 
   @override
   Future<MagnetometerData> getMagnetometerData() async {
-    final event = await magnetometerEventStream().first;
-    return MagnetometerData(
-      x: event.x,
-      y: event.y,
-      z: event.z,
-      timestamp: DateTime.now(),
-      tenantId: 'default',
-    );
+    if (_magnetometerAvailable) {
+      final event = await magnetometerEventStream().first;
+      return MagnetometerData(
+        x: event.x,
+        y: event.y,
+        z: event.z,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      );
+    } else {
+      return MagnetometerData(
+        x: 25.0,
+        y: 40.0,
+        z: 10.0,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      );
+    }
   }
 
   @override
   Future<ProximityData?> getProximityData() async {
-    // Always return mock data since we removed flutter_sensors
-    final bool isNear = DateTime.now().second % 10 < 5;
-    return ProximityData(
-      distance: isNear ? 0.0 : 5.0,
-      isNear: isNear,
-      timestamp: DateTime.now(),
-      tenantId: 'default',
-    );
+    if (_lastProximityData != null) {
+      return _lastProximityData!;
+    }
+    return _proximityController.stream.first;
   }
 
   @override
   Future<LightSensorData?> getLightData() async {
-    // Always return mock data since we removed flutter_sensors
-    final base = 200.0;
-    final variation = (DateTime.now().second % 60) * 10.0;
-    return LightSensorData(
-      illuminance: base + variation,
-      timestamp: DateTime.now(),
-      tenantId: 'default',
-    );
+    if (_lastLightData != null) {
+      return _lastLightData!;
+    }
+    return _lightController.stream.first;
   }
 
   @override
   Future<PressureData?> getPressureData() async {
-    // Always return mock data since we removed flutter_sensors
-    final base = 1013.0;
-    final variation = (DateTime.now().minute % 10) * 0.5;
-    return PressureData(
-      pressure: base + variation,
-      timestamp: DateTime.now(),
-      tenantId: 'default',
-    );
+    if (_lastPressureData != null) {
+      return _lastPressureData!;
+    }
+    return _pressureController.stream.first;
   }
 
   @override
@@ -346,26 +360,18 @@ class SensorPlusDataSource implements SensorDataSource {
 
   @override
   Future<List<String>> getAvailableSensors() async {
-    final availableSensors = <String>[];
+    final List<String> sensorList = [];
 
-    if (_accelerometerAvailable) {
-      availableSensors.add('accelerometer');
-    }
+    if (_accelerometerAvailable) sensorList.add('Accelerometer');
+    if (_gyroscopeAvailable) sensorList.add('Gyroscope');
+    if (_magnetometerAvailable) sensorList.add('Magnetometer');
 
-    if (_gyroscopeAvailable) {
-      availableSensors.add('gyroscope');
-    }
+    // Add mocked sensors with indication
+    sensorList.add('Proximity (simulated)');
+    sensorList.add('Light (simulated)');
+    sensorList.add('Pressure (simulated)');
 
-    if (_magnetometerAvailable) {
-      availableSensors.add('magnetometer');
-    }
-
-    // These are always simulated now
-    availableSensors.add('proximity (simulated)');
-    availableSensors.add('light (simulated)');
-    availableSensors.add('pressure (simulated)');
-
-    return availableSensors;
+    return sensorList;
   }
 
   @override
@@ -580,13 +586,13 @@ class SensorPlusDataSource implements SensorDataSource {
       tenantId: 'default',
     );
   }
-}
 
-// Helper functions for the mock data generation
-double sin(double value) {
-  return DateTime.now().millisecondsSinceEpoch % 100 / 100 * value;
-}
+  // Helper functions for the mock data generation
+  double sin(double value) {
+    return DateTime.now().millisecondsSinceEpoch % 100 / 100 * value;
+  }
 
-double cos(double value) {
-  return (1 - (DateTime.now().millisecondsSinceEpoch % 100) / 100) * value;
+  double cos(double value) {
+    return (1 - (DateTime.now().millisecondsSinceEpoch % 100) / 100) * value;
+  }
 }

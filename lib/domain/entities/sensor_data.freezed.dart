@@ -1022,7 +1022,9 @@ as String?,
 /// @nodoc
 mixin _$CombinedSensorData {
 
- AccelerometerData? get accelerometer; GyroscopeData? get gyroscope; MagnetometerData? get magnetometer; ProximityData? get proximity; LightSensorData? get light; PressureData? get pressure; DateTime get timestamp; String? get tenantId;
+// Basic sensors
+ AccelerometerData? get accelerometer; GyroscopeData? get gyroscope; MagnetometerData? get magnetometer; ProximityData? get proximity; LightSensorData? get light; PressureData? get pressure;// Additional sensors
+ StepCounterData? get stepCounter; StepDetectorData? get stepDetector; RotationVectorData? get rotationVector; OrientationData? get orientation; GravityData? get gravity; LinearAccelerationData? get linearAcceleration; GameRotationVectorData? get gameRotationVector; GeomagneticRotationVectorData? get geomagneticRotationVector; DateTime get timestamp; String? get tenantId;
 /// Create a copy of CombinedSensorData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1035,16 +1037,16 @@ $CombinedSensorDataCopyWith<CombinedSensorData> get copyWith => _$CombinedSensor
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CombinedSensorData&&(identical(other.accelerometer, accelerometer) || other.accelerometer == accelerometer)&&(identical(other.gyroscope, gyroscope) || other.gyroscope == gyroscope)&&(identical(other.magnetometer, magnetometer) || other.magnetometer == magnetometer)&&(identical(other.proximity, proximity) || other.proximity == proximity)&&(identical(other.light, light) || other.light == light)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CombinedSensorData&&(identical(other.accelerometer, accelerometer) || other.accelerometer == accelerometer)&&(identical(other.gyroscope, gyroscope) || other.gyroscope == gyroscope)&&(identical(other.magnetometer, magnetometer) || other.magnetometer == magnetometer)&&(identical(other.proximity, proximity) || other.proximity == proximity)&&(identical(other.light, light) || other.light == light)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.stepCounter, stepCounter) || other.stepCounter == stepCounter)&&(identical(other.stepDetector, stepDetector) || other.stepDetector == stepDetector)&&(identical(other.rotationVector, rotationVector) || other.rotationVector == rotationVector)&&(identical(other.orientation, orientation) || other.orientation == orientation)&&(identical(other.gravity, gravity) || other.gravity == gravity)&&(identical(other.linearAcceleration, linearAcceleration) || other.linearAcceleration == linearAcceleration)&&(identical(other.gameRotationVector, gameRotationVector) || other.gameRotationVector == gameRotationVector)&&(identical(other.geomagneticRotationVector, geomagneticRotationVector) || other.geomagneticRotationVector == geomagneticRotationVector)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,accelerometer,gyroscope,magnetometer,proximity,light,pressure,timestamp,tenantId);
+int get hashCode => Object.hash(runtimeType,accelerometer,gyroscope,magnetometer,proximity,light,pressure,stepCounter,stepDetector,rotationVector,orientation,gravity,linearAcceleration,gameRotationVector,geomagneticRotationVector,timestamp,tenantId);
 
 @override
 String toString() {
-  return 'CombinedSensorData(accelerometer: $accelerometer, gyroscope: $gyroscope, magnetometer: $magnetometer, proximity: $proximity, light: $light, pressure: $pressure, timestamp: $timestamp, tenantId: $tenantId)';
+  return 'CombinedSensorData(accelerometer: $accelerometer, gyroscope: $gyroscope, magnetometer: $magnetometer, proximity: $proximity, light: $light, pressure: $pressure, stepCounter: $stepCounter, stepDetector: $stepDetector, rotationVector: $rotationVector, orientation: $orientation, gravity: $gravity, linearAcceleration: $linearAcceleration, gameRotationVector: $gameRotationVector, geomagneticRotationVector: $geomagneticRotationVector, timestamp: $timestamp, tenantId: $tenantId)';
 }
 
 
@@ -1055,11 +1057,11 @@ abstract mixin class $CombinedSensorDataCopyWith<$Res>  {
   factory $CombinedSensorDataCopyWith(CombinedSensorData value, $Res Function(CombinedSensorData) _then) = _$CombinedSensorDataCopyWithImpl;
 @useResult
 $Res call({
- AccelerometerData? accelerometer, GyroscopeData? gyroscope, MagnetometerData? magnetometer, ProximityData? proximity, LightSensorData? light, PressureData? pressure, DateTime timestamp, String? tenantId
+ AccelerometerData? accelerometer, GyroscopeData? gyroscope, MagnetometerData? magnetometer, ProximityData? proximity, LightSensorData? light, PressureData? pressure, StepCounterData? stepCounter, StepDetectorData? stepDetector, RotationVectorData? rotationVector, OrientationData? orientation, GravityData? gravity, LinearAccelerationData? linearAcceleration, GameRotationVectorData? gameRotationVector, GeomagneticRotationVectorData? geomagneticRotationVector, DateTime timestamp, String? tenantId
 });
 
 
-$AccelerometerDataCopyWith<$Res>? get accelerometer;$GyroscopeDataCopyWith<$Res>? get gyroscope;$MagnetometerDataCopyWith<$Res>? get magnetometer;$ProximityDataCopyWith<$Res>? get proximity;$LightSensorDataCopyWith<$Res>? get light;$PressureDataCopyWith<$Res>? get pressure;
+$AccelerometerDataCopyWith<$Res>? get accelerometer;$GyroscopeDataCopyWith<$Res>? get gyroscope;$MagnetometerDataCopyWith<$Res>? get magnetometer;$ProximityDataCopyWith<$Res>? get proximity;$LightSensorDataCopyWith<$Res>? get light;$PressureDataCopyWith<$Res>? get pressure;$StepCounterDataCopyWith<$Res>? get stepCounter;$StepDetectorDataCopyWith<$Res>? get stepDetector;$RotationVectorDataCopyWith<$Res>? get rotationVector;$OrientationDataCopyWith<$Res>? get orientation;$GravityDataCopyWith<$Res>? get gravity;$LinearAccelerationDataCopyWith<$Res>? get linearAcceleration;$GameRotationVectorDataCopyWith<$Res>? get gameRotationVector;$GeomagneticRotationVectorDataCopyWith<$Res>? get geomagneticRotationVector;
 
 }
 /// @nodoc
@@ -1072,7 +1074,7 @@ class _$CombinedSensorDataCopyWithImpl<$Res>
 
 /// Create a copy of CombinedSensorData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? accelerometer = freezed,Object? gyroscope = freezed,Object? magnetometer = freezed,Object? proximity = freezed,Object? light = freezed,Object? pressure = freezed,Object? timestamp = null,Object? tenantId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? accelerometer = freezed,Object? gyroscope = freezed,Object? magnetometer = freezed,Object? proximity = freezed,Object? light = freezed,Object? pressure = freezed,Object? stepCounter = freezed,Object? stepDetector = freezed,Object? rotationVector = freezed,Object? orientation = freezed,Object? gravity = freezed,Object? linearAcceleration = freezed,Object? gameRotationVector = freezed,Object? geomagneticRotationVector = freezed,Object? timestamp = null,Object? tenantId = freezed,}) {
   return _then(_self.copyWith(
 accelerometer: freezed == accelerometer ? _self.accelerometer : accelerometer // ignore: cast_nullable_to_non_nullable
 as AccelerometerData?,gyroscope: freezed == gyroscope ? _self.gyroscope : gyroscope // ignore: cast_nullable_to_non_nullable
@@ -1080,7 +1082,15 @@ as GyroscopeData?,magnetometer: freezed == magnetometer ? _self.magnetometer : m
 as MagnetometerData?,proximity: freezed == proximity ? _self.proximity : proximity // ignore: cast_nullable_to_non_nullable
 as ProximityData?,light: freezed == light ? _self.light : light // ignore: cast_nullable_to_non_nullable
 as LightSensorData?,pressure: freezed == pressure ? _self.pressure : pressure // ignore: cast_nullable_to_non_nullable
-as PressureData?,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as PressureData?,stepCounter: freezed == stepCounter ? _self.stepCounter : stepCounter // ignore: cast_nullable_to_non_nullable
+as StepCounterData?,stepDetector: freezed == stepDetector ? _self.stepDetector : stepDetector // ignore: cast_nullable_to_non_nullable
+as StepDetectorData?,rotationVector: freezed == rotationVector ? _self.rotationVector : rotationVector // ignore: cast_nullable_to_non_nullable
+as RotationVectorData?,orientation: freezed == orientation ? _self.orientation : orientation // ignore: cast_nullable_to_non_nullable
+as OrientationData?,gravity: freezed == gravity ? _self.gravity : gravity // ignore: cast_nullable_to_non_nullable
+as GravityData?,linearAcceleration: freezed == linearAcceleration ? _self.linearAcceleration : linearAcceleration // ignore: cast_nullable_to_non_nullable
+as LinearAccelerationData?,gameRotationVector: freezed == gameRotationVector ? _self.gameRotationVector : gameRotationVector // ignore: cast_nullable_to_non_nullable
+as GameRotationVectorData?,geomagneticRotationVector: freezed == geomagneticRotationVector ? _self.geomagneticRotationVector : geomagneticRotationVector // ignore: cast_nullable_to_non_nullable
+as GeomagneticRotationVectorData?,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,tenantId: freezed == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -1157,6 +1167,102 @@ $PressureDataCopyWith<$Res>? get pressure {
   return $PressureDataCopyWith<$Res>(_self.pressure!, (value) {
     return _then(_self.copyWith(pressure: value));
   });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$StepCounterDataCopyWith<$Res>? get stepCounter {
+    if (_self.stepCounter == null) {
+    return null;
+  }
+
+  return $StepCounterDataCopyWith<$Res>(_self.stepCounter!, (value) {
+    return _then(_self.copyWith(stepCounter: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$StepDetectorDataCopyWith<$Res>? get stepDetector {
+    if (_self.stepDetector == null) {
+    return null;
+  }
+
+  return $StepDetectorDataCopyWith<$Res>(_self.stepDetector!, (value) {
+    return _then(_self.copyWith(stepDetector: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RotationVectorDataCopyWith<$Res>? get rotationVector {
+    if (_self.rotationVector == null) {
+    return null;
+  }
+
+  return $RotationVectorDataCopyWith<$Res>(_self.rotationVector!, (value) {
+    return _then(_self.copyWith(rotationVector: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$OrientationDataCopyWith<$Res>? get orientation {
+    if (_self.orientation == null) {
+    return null;
+  }
+
+  return $OrientationDataCopyWith<$Res>(_self.orientation!, (value) {
+    return _then(_self.copyWith(orientation: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GravityDataCopyWith<$Res>? get gravity {
+    if (_self.gravity == null) {
+    return null;
+  }
+
+  return $GravityDataCopyWith<$Res>(_self.gravity!, (value) {
+    return _then(_self.copyWith(gravity: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$LinearAccelerationDataCopyWith<$Res>? get linearAcceleration {
+    if (_self.linearAcceleration == null) {
+    return null;
+  }
+
+  return $LinearAccelerationDataCopyWith<$Res>(_self.linearAcceleration!, (value) {
+    return _then(_self.copyWith(linearAcceleration: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GameRotationVectorDataCopyWith<$Res>? get gameRotationVector {
+    if (_self.gameRotationVector == null) {
+    return null;
+  }
+
+  return $GameRotationVectorDataCopyWith<$Res>(_self.gameRotationVector!, (value) {
+    return _then(_self.copyWith(gameRotationVector: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GeomagneticRotationVectorDataCopyWith<$Res>? get geomagneticRotationVector {
+    if (_self.geomagneticRotationVector == null) {
+    return null;
+  }
+
+  return $GeomagneticRotationVectorDataCopyWith<$Res>(_self.geomagneticRotationVector!, (value) {
+    return _then(_self.copyWith(geomagneticRotationVector: value));
+  });
 }
 }
 
@@ -1165,15 +1271,25 @@ $PressureDataCopyWith<$Res>? get pressure {
 @JsonSerializable()
 
 class _CombinedSensorData implements CombinedSensorData {
-  const _CombinedSensorData({this.accelerometer, this.gyroscope, this.magnetometer, this.proximity, this.light, this.pressure, required this.timestamp, this.tenantId});
+  const _CombinedSensorData({this.accelerometer, this.gyroscope, this.magnetometer, this.proximity, this.light, this.pressure, this.stepCounter, this.stepDetector, this.rotationVector, this.orientation, this.gravity, this.linearAcceleration, this.gameRotationVector, this.geomagneticRotationVector, required this.timestamp, this.tenantId});
   factory _CombinedSensorData.fromJson(Map<String, dynamic> json) => _$CombinedSensorDataFromJson(json);
 
+// Basic sensors
 @override final  AccelerometerData? accelerometer;
 @override final  GyroscopeData? gyroscope;
 @override final  MagnetometerData? magnetometer;
 @override final  ProximityData? proximity;
 @override final  LightSensorData? light;
 @override final  PressureData? pressure;
+// Additional sensors
+@override final  StepCounterData? stepCounter;
+@override final  StepDetectorData? stepDetector;
+@override final  RotationVectorData? rotationVector;
+@override final  OrientationData? orientation;
+@override final  GravityData? gravity;
+@override final  LinearAccelerationData? linearAcceleration;
+@override final  GameRotationVectorData? gameRotationVector;
+@override final  GeomagneticRotationVectorData? geomagneticRotationVector;
 @override final  DateTime timestamp;
 @override final  String? tenantId;
 
@@ -1190,16 +1306,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CombinedSensorData&&(identical(other.accelerometer, accelerometer) || other.accelerometer == accelerometer)&&(identical(other.gyroscope, gyroscope) || other.gyroscope == gyroscope)&&(identical(other.magnetometer, magnetometer) || other.magnetometer == magnetometer)&&(identical(other.proximity, proximity) || other.proximity == proximity)&&(identical(other.light, light) || other.light == light)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CombinedSensorData&&(identical(other.accelerometer, accelerometer) || other.accelerometer == accelerometer)&&(identical(other.gyroscope, gyroscope) || other.gyroscope == gyroscope)&&(identical(other.magnetometer, magnetometer) || other.magnetometer == magnetometer)&&(identical(other.proximity, proximity) || other.proximity == proximity)&&(identical(other.light, light) || other.light == light)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.stepCounter, stepCounter) || other.stepCounter == stepCounter)&&(identical(other.stepDetector, stepDetector) || other.stepDetector == stepDetector)&&(identical(other.rotationVector, rotationVector) || other.rotationVector == rotationVector)&&(identical(other.orientation, orientation) || other.orientation == orientation)&&(identical(other.gravity, gravity) || other.gravity == gravity)&&(identical(other.linearAcceleration, linearAcceleration) || other.linearAcceleration == linearAcceleration)&&(identical(other.gameRotationVector, gameRotationVector) || other.gameRotationVector == gameRotationVector)&&(identical(other.geomagneticRotationVector, geomagneticRotationVector) || other.geomagneticRotationVector == geomagneticRotationVector)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,accelerometer,gyroscope,magnetometer,proximity,light,pressure,timestamp,tenantId);
+int get hashCode => Object.hash(runtimeType,accelerometer,gyroscope,magnetometer,proximity,light,pressure,stepCounter,stepDetector,rotationVector,orientation,gravity,linearAcceleration,gameRotationVector,geomagneticRotationVector,timestamp,tenantId);
 
 @override
 String toString() {
-  return 'CombinedSensorData(accelerometer: $accelerometer, gyroscope: $gyroscope, magnetometer: $magnetometer, proximity: $proximity, light: $light, pressure: $pressure, timestamp: $timestamp, tenantId: $tenantId)';
+  return 'CombinedSensorData(accelerometer: $accelerometer, gyroscope: $gyroscope, magnetometer: $magnetometer, proximity: $proximity, light: $light, pressure: $pressure, stepCounter: $stepCounter, stepDetector: $stepDetector, rotationVector: $rotationVector, orientation: $orientation, gravity: $gravity, linearAcceleration: $linearAcceleration, gameRotationVector: $gameRotationVector, geomagneticRotationVector: $geomagneticRotationVector, timestamp: $timestamp, tenantId: $tenantId)';
 }
 
 
@@ -1210,11 +1326,11 @@ abstract mixin class _$CombinedSensorDataCopyWith<$Res> implements $CombinedSens
   factory _$CombinedSensorDataCopyWith(_CombinedSensorData value, $Res Function(_CombinedSensorData) _then) = __$CombinedSensorDataCopyWithImpl;
 @override @useResult
 $Res call({
- AccelerometerData? accelerometer, GyroscopeData? gyroscope, MagnetometerData? magnetometer, ProximityData? proximity, LightSensorData? light, PressureData? pressure, DateTime timestamp, String? tenantId
+ AccelerometerData? accelerometer, GyroscopeData? gyroscope, MagnetometerData? magnetometer, ProximityData? proximity, LightSensorData? light, PressureData? pressure, StepCounterData? stepCounter, StepDetectorData? stepDetector, RotationVectorData? rotationVector, OrientationData? orientation, GravityData? gravity, LinearAccelerationData? linearAcceleration, GameRotationVectorData? gameRotationVector, GeomagneticRotationVectorData? geomagneticRotationVector, DateTime timestamp, String? tenantId
 });
 
 
-@override $AccelerometerDataCopyWith<$Res>? get accelerometer;@override $GyroscopeDataCopyWith<$Res>? get gyroscope;@override $MagnetometerDataCopyWith<$Res>? get magnetometer;@override $ProximityDataCopyWith<$Res>? get proximity;@override $LightSensorDataCopyWith<$Res>? get light;@override $PressureDataCopyWith<$Res>? get pressure;
+@override $AccelerometerDataCopyWith<$Res>? get accelerometer;@override $GyroscopeDataCopyWith<$Res>? get gyroscope;@override $MagnetometerDataCopyWith<$Res>? get magnetometer;@override $ProximityDataCopyWith<$Res>? get proximity;@override $LightSensorDataCopyWith<$Res>? get light;@override $PressureDataCopyWith<$Res>? get pressure;@override $StepCounterDataCopyWith<$Res>? get stepCounter;@override $StepDetectorDataCopyWith<$Res>? get stepDetector;@override $RotationVectorDataCopyWith<$Res>? get rotationVector;@override $OrientationDataCopyWith<$Res>? get orientation;@override $GravityDataCopyWith<$Res>? get gravity;@override $LinearAccelerationDataCopyWith<$Res>? get linearAcceleration;@override $GameRotationVectorDataCopyWith<$Res>? get gameRotationVector;@override $GeomagneticRotationVectorDataCopyWith<$Res>? get geomagneticRotationVector;
 
 }
 /// @nodoc
@@ -1227,7 +1343,7 @@ class __$CombinedSensorDataCopyWithImpl<$Res>
 
 /// Create a copy of CombinedSensorData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? accelerometer = freezed,Object? gyroscope = freezed,Object? magnetometer = freezed,Object? proximity = freezed,Object? light = freezed,Object? pressure = freezed,Object? timestamp = null,Object? tenantId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? accelerometer = freezed,Object? gyroscope = freezed,Object? magnetometer = freezed,Object? proximity = freezed,Object? light = freezed,Object? pressure = freezed,Object? stepCounter = freezed,Object? stepDetector = freezed,Object? rotationVector = freezed,Object? orientation = freezed,Object? gravity = freezed,Object? linearAcceleration = freezed,Object? gameRotationVector = freezed,Object? geomagneticRotationVector = freezed,Object? timestamp = null,Object? tenantId = freezed,}) {
   return _then(_CombinedSensorData(
 accelerometer: freezed == accelerometer ? _self.accelerometer : accelerometer // ignore: cast_nullable_to_non_nullable
 as AccelerometerData?,gyroscope: freezed == gyroscope ? _self.gyroscope : gyroscope // ignore: cast_nullable_to_non_nullable
@@ -1235,7 +1351,15 @@ as GyroscopeData?,magnetometer: freezed == magnetometer ? _self.magnetometer : m
 as MagnetometerData?,proximity: freezed == proximity ? _self.proximity : proximity // ignore: cast_nullable_to_non_nullable
 as ProximityData?,light: freezed == light ? _self.light : light // ignore: cast_nullable_to_non_nullable
 as LightSensorData?,pressure: freezed == pressure ? _self.pressure : pressure // ignore: cast_nullable_to_non_nullable
-as PressureData?,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as PressureData?,stepCounter: freezed == stepCounter ? _self.stepCounter : stepCounter // ignore: cast_nullable_to_non_nullable
+as StepCounterData?,stepDetector: freezed == stepDetector ? _self.stepDetector : stepDetector // ignore: cast_nullable_to_non_nullable
+as StepDetectorData?,rotationVector: freezed == rotationVector ? _self.rotationVector : rotationVector // ignore: cast_nullable_to_non_nullable
+as RotationVectorData?,orientation: freezed == orientation ? _self.orientation : orientation // ignore: cast_nullable_to_non_nullable
+as OrientationData?,gravity: freezed == gravity ? _self.gravity : gravity // ignore: cast_nullable_to_non_nullable
+as GravityData?,linearAcceleration: freezed == linearAcceleration ? _self.linearAcceleration : linearAcceleration // ignore: cast_nullable_to_non_nullable
+as LinearAccelerationData?,gameRotationVector: freezed == gameRotationVector ? _self.gameRotationVector : gameRotationVector // ignore: cast_nullable_to_non_nullable
+as GameRotationVectorData?,geomagneticRotationVector: freezed == geomagneticRotationVector ? _self.geomagneticRotationVector : geomagneticRotationVector // ignore: cast_nullable_to_non_nullable
+as GeomagneticRotationVectorData?,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,tenantId: freezed == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -1312,6 +1436,102 @@ $PressureDataCopyWith<$Res>? get pressure {
 
   return $PressureDataCopyWith<$Res>(_self.pressure!, (value) {
     return _then(_self.copyWith(pressure: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$StepCounterDataCopyWith<$Res>? get stepCounter {
+    if (_self.stepCounter == null) {
+    return null;
+  }
+
+  return $StepCounterDataCopyWith<$Res>(_self.stepCounter!, (value) {
+    return _then(_self.copyWith(stepCounter: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$StepDetectorDataCopyWith<$Res>? get stepDetector {
+    if (_self.stepDetector == null) {
+    return null;
+  }
+
+  return $StepDetectorDataCopyWith<$Res>(_self.stepDetector!, (value) {
+    return _then(_self.copyWith(stepDetector: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RotationVectorDataCopyWith<$Res>? get rotationVector {
+    if (_self.rotationVector == null) {
+    return null;
+  }
+
+  return $RotationVectorDataCopyWith<$Res>(_self.rotationVector!, (value) {
+    return _then(_self.copyWith(rotationVector: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$OrientationDataCopyWith<$Res>? get orientation {
+    if (_self.orientation == null) {
+    return null;
+  }
+
+  return $OrientationDataCopyWith<$Res>(_self.orientation!, (value) {
+    return _then(_self.copyWith(orientation: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GravityDataCopyWith<$Res>? get gravity {
+    if (_self.gravity == null) {
+    return null;
+  }
+
+  return $GravityDataCopyWith<$Res>(_self.gravity!, (value) {
+    return _then(_self.copyWith(gravity: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$LinearAccelerationDataCopyWith<$Res>? get linearAcceleration {
+    if (_self.linearAcceleration == null) {
+    return null;
+  }
+
+  return $LinearAccelerationDataCopyWith<$Res>(_self.linearAcceleration!, (value) {
+    return _then(_self.copyWith(linearAcceleration: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GameRotationVectorDataCopyWith<$Res>? get gameRotationVector {
+    if (_self.gameRotationVector == null) {
+    return null;
+  }
+
+  return $GameRotationVectorDataCopyWith<$Res>(_self.gameRotationVector!, (value) {
+    return _then(_self.copyWith(gameRotationVector: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GeomagneticRotationVectorDataCopyWith<$Res>? get geomagneticRotationVector {
+    if (_self.geomagneticRotationVector == null) {
+    return null;
+  }
+
+  return $GeomagneticRotationVectorDataCopyWith<$Res>(_self.geomagneticRotationVector!, (value) {
+    return _then(_self.copyWith(geomagneticRotationVector: value));
   });
 }
 }

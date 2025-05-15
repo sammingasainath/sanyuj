@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'additional_sensors.dart';
 
 part 'sensor_data.freezed.dart';
 part 'sensor_data.g.dart';
@@ -99,12 +100,24 @@ abstract class PressureData with _$PressureData {
 @freezed
 abstract class CombinedSensorData with _$CombinedSensorData {
   const factory CombinedSensorData({
+    // Basic sensors
     AccelerometerData? accelerometer,
     GyroscopeData? gyroscope,
     MagnetometerData? magnetometer,
     ProximityData? proximity,
     LightSensorData? light,
     PressureData? pressure,
+
+    // Additional sensors
+    StepCounterData? stepCounter,
+    StepDetectorData? stepDetector,
+    RotationVectorData? rotationVector,
+    OrientationData? orientation,
+    GravityData? gravity,
+    LinearAccelerationData? linearAcceleration,
+    GameRotationVectorData? gameRotationVector,
+    GeomagneticRotationVectorData? geomagneticRotationVector,
+
     required DateTime timestamp,
     String? tenantId,
   }) = _CombinedSensorData;

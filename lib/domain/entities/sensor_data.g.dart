@@ -155,6 +155,52 @@ _CombinedSensorData _$CombinedSensorDataFromJson(
       json['pressure'] == null
           ? null
           : PressureData.fromJson(json['pressure'] as Map<String, dynamic>),
+  stepCounter:
+      json['stepCounter'] == null
+          ? null
+          : StepCounterData.fromJson(
+            json['stepCounter'] as Map<String, dynamic>,
+          ),
+  stepDetector:
+      json['stepDetector'] == null
+          ? null
+          : StepDetectorData.fromJson(
+            json['stepDetector'] as Map<String, dynamic>,
+          ),
+  rotationVector:
+      json['rotationVector'] == null
+          ? null
+          : RotationVectorData.fromJson(
+            json['rotationVector'] as Map<String, dynamic>,
+          ),
+  orientation:
+      json['orientation'] == null
+          ? null
+          : OrientationData.fromJson(
+            json['orientation'] as Map<String, dynamic>,
+          ),
+  gravity:
+      json['gravity'] == null
+          ? null
+          : GravityData.fromJson(json['gravity'] as Map<String, dynamic>),
+  linearAcceleration:
+      json['linearAcceleration'] == null
+          ? null
+          : LinearAccelerationData.fromJson(
+            json['linearAcceleration'] as Map<String, dynamic>,
+          ),
+  gameRotationVector:
+      json['gameRotationVector'] == null
+          ? null
+          : GameRotationVectorData.fromJson(
+            json['gameRotationVector'] as Map<String, dynamic>,
+          ),
+  geomagneticRotationVector:
+      json['geomagneticRotationVector'] == null
+          ? null
+          : GeomagneticRotationVectorData.fromJson(
+            json['geomagneticRotationVector'] as Map<String, dynamic>,
+          ),
   timestamp: DateTime.parse(json['timestamp'] as String),
   tenantId: json['tenantId'] as String?,
 );
@@ -167,6 +213,14 @@ Map<String, dynamic> _$CombinedSensorDataToJson(_CombinedSensorData instance) =>
       'proximity': instance.proximity,
       'light': instance.light,
       'pressure': instance.pressure,
+      'stepCounter': instance.stepCounter,
+      'stepDetector': instance.stepDetector,
+      'rotationVector': instance.rotationVector,
+      'orientation': instance.orientation,
+      'gravity': instance.gravity,
+      'linearAcceleration': instance.linearAcceleration,
+      'gameRotationVector': instance.gameRotationVector,
+      'geomagneticRotationVector': instance.geomagneticRotationVector,
       'timestamp': instance.timestamp.toIso8601String(),
       'tenantId': instance.tenantId,
     };

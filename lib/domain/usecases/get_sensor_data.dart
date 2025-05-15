@@ -1,4 +1,5 @@
 import 'package:sensor_api/domain/entities/sensor_data.dart';
+import 'package:sensor_api/domain/entities/additional_sensors.dart';
 import 'package:sensor_api/domain/repositories/sensor_repository.dart';
 
 class GetAccelerometerDataUseCase {
@@ -152,5 +153,162 @@ class GetAvailableSensorsUseCase {
   /// Get all available sensors
   Future<List<String>> call() {
     return repository.getAvailableSensors();
+  }
+}
+
+// Additional sensor use cases
+
+class GetStepCounterStreamUseCase {
+  final SensorRepository repository;
+
+  GetStepCounterStreamUseCase(this.repository);
+
+  /// Get stream of step counter data
+  Stream<StepCounterData> call() {
+    return repository.getStepCounterStream();
+  }
+}
+
+class GetStepDetectorStreamUseCase {
+  final SensorRepository repository;
+
+  GetStepDetectorStreamUseCase(this.repository);
+
+  /// Get stream of step detector data
+  Stream<StepDetectorData> call() {
+    return repository.getStepDetectorStream();
+  }
+}
+
+class GetRotationVectorStreamUseCase {
+  final SensorRepository repository;
+
+  GetRotationVectorStreamUseCase(this.repository);
+
+  /// Get stream of rotation vector data
+  Stream<RotationVectorData> call() {
+    return repository.getRotationVectorStream();
+  }
+}
+
+class GetOrientationStreamUseCase {
+  final SensorRepository repository;
+
+  GetOrientationStreamUseCase(this.repository);
+
+  /// Get stream of orientation data
+  Stream<OrientationData> call() {
+    return repository.getOrientationStream();
+  }
+}
+
+class GetGravityStreamUseCase {
+  final SensorRepository repository;
+
+  GetGravityStreamUseCase(this.repository);
+
+  /// Get stream of gravity data
+  Stream<GravityData> call() {
+    return repository.getGravityStream();
+  }
+}
+
+class GetLinearAccelerationStreamUseCase {
+  final SensorRepository repository;
+
+  GetLinearAccelerationStreamUseCase(this.repository);
+
+  /// Get stream of linear acceleration data
+  Stream<LinearAccelerationData> call() {
+    return repository.getLinearAccelerationStream();
+  }
+}
+
+// Single-point data use cases for additional sensors
+class GetStepCounterDataUseCase {
+  final SensorRepository repository;
+
+  GetStepCounterDataUseCase(this.repository);
+
+  /// Get the latest step counter reading
+  Future<StepCounterData?> call() {
+    return repository.getStepCounterData();
+  }
+}
+
+class GetStepDetectorDataUseCase {
+  final SensorRepository repository;
+
+  GetStepDetectorDataUseCase(this.repository);
+
+  /// Get the latest step detector reading
+  Future<StepDetectorData?> call() {
+    return repository.getStepDetectorData();
+  }
+}
+
+class GetRotationVectorDataUseCase {
+  final SensorRepository repository;
+
+  GetRotationVectorDataUseCase(this.repository);
+
+  /// Get the latest rotation vector reading
+  Future<RotationVectorData?> call() {
+    return repository.getRotationVectorData();
+  }
+}
+
+class GetOrientationDataUseCase {
+  final SensorRepository repository;
+
+  GetOrientationDataUseCase(this.repository);
+
+  /// Get the latest orientation reading
+  Future<OrientationData?> call() {
+    return repository.getOrientationData();
+  }
+}
+
+class GetGravityDataUseCase {
+  final SensorRepository repository;
+
+  GetGravityDataUseCase(this.repository);
+
+  /// Get the latest gravity reading
+  Future<GravityData?> call() {
+    return repository.getGravityData();
+  }
+}
+
+class GetLinearAccelerationDataUseCase {
+  final SensorRepository repository;
+
+  GetLinearAccelerationDataUseCase(this.repository);
+
+  /// Get the latest linear acceleration reading
+  Future<LinearAccelerationData?> call() {
+    return repository.getLinearAccelerationData();
+  }
+}
+
+class GetGameRotationVectorDataUseCase {
+  final SensorRepository repository;
+
+  GetGameRotationVectorDataUseCase(this.repository);
+
+  /// Get the latest game rotation vector reading
+  Future<GameRotationVectorData?> call() {
+    return repository.getGameRotationVectorData();
+  }
+}
+
+class GetGeomagneticRotationVectorDataUseCase {
+  final SensorRepository repository;
+
+  GetGeomagneticRotationVectorDataUseCase(this.repository);
+
+  /// Get the latest geomagnetic rotation vector reading
+  Future<GeomagneticRotationVectorData?> call() {
+    return repository.getGeomagneticRotationVectorData();
   }
 }

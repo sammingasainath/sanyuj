@@ -4,6 +4,10 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <!-- Add the following line only if targeting Android 12 (API level 31) or higher -->
     <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" />
+    <!-- Activity recognition permission for step counter/detector (Android 10+) -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <!-- Wake lock permission for keeping sensors alive -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- Sensors permissions are automatically included with the sensors_plus package -->
     
     <application
