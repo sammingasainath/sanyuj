@@ -141,6 +141,58 @@ class PlatformSensorDataSource implements SensorDataSource {
   GameRotationVectorData? _lastGameRotationVectorData;
   GeomagneticRotationVectorData? _lastGeomagneticRotationVectorData;
 
+  // New sensor availability
+  bool _significantMotionAvailable = false;
+  bool _stationaryDetectAvailable = false;
+  bool _wakeGestureAvailable = false;
+  bool _pickupDetectAvailable = false;
+  bool _accelerometerUncalibratedAvailable = false;
+  bool _magneticFieldUncalibratedAvailable = false;
+  bool _gyroscopeUncalibratedAvailable = false;
+
+  // New sensor working status
+  bool _significantMotionWorking = false;
+  bool _stationaryDetectWorking = false;
+  bool _wakeGestureWorking = false;
+  bool _pickupDetectWorking = false;
+  bool _accelerometerUncalibratedWorking = false;
+  bool _magneticFieldUncalibratedWorking = false;
+  bool _gyroscopeUncalibratedWorking = false;
+
+  // Last known values for new sensors
+  SignificantMotionData? _lastSignificantMotionData;
+  StationaryDetectData? _lastStationaryDetectData;
+  WakeGestureData? _lastWakeGestureData;
+  PickupDetectData? _lastPickupDetectData;
+  AccelerometerUncalibratedData? _lastAccelerometerUncalibratedData;
+  MagneticFieldUncalibratedData? _lastMagneticFieldUncalibratedData;
+  GyroscopeUncalibratedData? _lastGyroscopeUncalibratedData;
+
+  // Stream controllers for new sensors
+  final _significantMotionStreamController =
+      StreamController<SignificantMotionData>.broadcast();
+  final _stationaryDetectStreamController =
+      StreamController<StationaryDetectData>.broadcast();
+  final _wakeGestureStreamController =
+      StreamController<WakeGestureData>.broadcast();
+  final _pickupDetectStreamController =
+      StreamController<PickupDetectData>.broadcast();
+  final _accelerometerUncalibratedStreamController =
+      StreamController<AccelerometerUncalibratedData>.broadcast();
+  final _magneticFieldUncalibratedStreamController =
+      StreamController<MagneticFieldUncalibratedData>.broadcast();
+  final _gyroscopeUncalibratedStreamController =
+      StreamController<GyroscopeUncalibratedData>.broadcast();
+
+  // Subscriptions for new sensors
+  StreamSubscription? _significantMotionSubscription;
+  StreamSubscription? _stationaryDetectSubscription;
+  StreamSubscription? _wakeGestureSubscription;
+  StreamSubscription? _pickupDetectSubscription;
+  StreamSubscription? _accelerometerUncalibratedSubscription;
+  StreamSubscription? _magneticFieldUncalibratedSubscription;
+  StreamSubscription? _gyroscopeUncalibratedSubscription;
+
   PlatformSensorDataSource() {
     _initialize();
   }
@@ -213,6 +265,58 @@ class PlatformSensorDataSource implements SensorDataSource {
       _geomagneticRotationVectorAvailable = availablePlatformSensors.contains(
         'GeomagneticRotationVector',
       );
+
+      // Check new sensors availability
+      try {
+        final availablePlatformSensors =
+            await _methodChannel.invokeMethod<List<dynamic>>(
+              'getAvailableSensors',
+            ) ??
+            [];
+
+        // ... existing sensor checks ...
+
+        // Check new sensors
+        _significantMotionAvailable = availablePlatformSensors.contains(
+          'SignificantMotion',
+        );
+        _stationaryDetectAvailable = availablePlatformSensors.contains(
+          'StationaryDetect',
+        );
+        _wakeGestureAvailable = availablePlatformSensors.contains(
+          'WakeGesture',
+        );
+        _pickupDetectAvailable = availablePlatformSensors.contains(
+          'PickupDetect',
+        );
+        _accelerometerUncalibratedAvailable = availablePlatformSensors.contains(
+          'AccelerometerUncalibrated',
+        );
+        _magneticFieldUncalibratedAvailable = availablePlatformSensors.contains(
+          'MagneticFieldUncalibrated',
+        );
+        _gyroscopeUncalibratedAvailable = availablePlatformSensors.contains(
+          'GyroscopeUncalibrated',
+        );
+
+        // Log availability
+        _logger.info('New sensors availability:');
+        _logger.info('- Significant Motion: $_significantMotionAvailable');
+        _logger.info('- Stationary Detect: $_stationaryDetectAvailable');
+        _logger.info('- Wake Gesture: $_wakeGestureAvailable');
+        _logger.info('- Pickup Detect: $_pickupDetectAvailable');
+        _logger.info(
+          '- Accelerometer Uncalibrated: $_accelerometerUncalibratedAvailable',
+        );
+        _logger.info(
+          '- Magnetic Field Uncalibrated: $_magneticFieldUncalibratedAvailable',
+        );
+        _logger.info(
+          '- Gyroscope Uncalibrated: $_gyroscopeUncalibratedAvailable',
+        );
+      } catch (e) {
+        _logger.severe('Error checking sensor availability: $e');
+      }
 
       _logger.info('Sensor availability:');
       _logger.info('- Accelerometer: $_accelerometerAvailable');
@@ -320,6 +424,9 @@ class PlatformSensorDataSource implements SensorDataSource {
       _startMockGeomagneticRotationVectorStream();
     }
 
+    // Setup streams for mock data for new sensors
+    _setupMockStreamsForNewSensors();
+
     // Set a timeout to check if sensors started reporting data
     Future.delayed(const Duration(seconds: 3), () {
       // Check existing sensors
@@ -423,6 +530,15 @@ class PlatformSensorDataSource implements SensorDataSource {
     _gameRotationVectorSubscription?.cancel();
     _geomagneticRotationVectorSubscription?.cancel();
 
+    // Cancel new sensor subscriptions
+    _significantMotionSubscription?.cancel();
+    _stationaryDetectSubscription?.cancel();
+    _wakeGestureSubscription?.cancel();
+    _pickupDetectSubscription?.cancel();
+    _accelerometerUncalibratedSubscription?.cancel();
+    _magneticFieldUncalibratedSubscription?.cancel();
+    _gyroscopeUncalibratedSubscription?.cancel();
+
     // Close stream controllers for existing sensors
     _proximityStreamController.close();
     _lightStreamController.close();
@@ -437,6 +553,15 @@ class PlatformSensorDataSource implements SensorDataSource {
     _linearAccelerationStreamController.close();
     _gameRotationVectorStreamController.close();
     _geomagneticRotationVectorStreamController.close();
+
+    // Close new sensor controllers
+    _significantMotionStreamController.close();
+    _stationaryDetectStreamController.close();
+    _wakeGestureStreamController.close();
+    _pickupDetectStreamController.close();
+    _accelerometerUncalibratedStreamController.close();
+    _magneticFieldUncalibratedStreamController.close();
+    _gyroscopeUncalibratedStreamController.close();
   }
 
   @override
@@ -668,6 +793,15 @@ class PlatformSensorDataSource implements SensorDataSource {
     final gameRotationVector = await getGameRotationVectorData();
     final geomagneticRotationVector = await getGeomagneticRotationVectorData();
 
+    // Get data from new sensors
+    final significantMotion = await getSignificantMotionData();
+    final stationaryDetect = await getStationaryDetectData();
+    final wakeGesture = await getWakeGestureData();
+    final pickupDetect = await getPickupDetectData();
+    final accelerometerUncalibrated = await getAccelerometerUncalibratedData();
+    final magneticFieldUncalibrated = await getMagneticFieldUncalibratedData();
+    final gyroscopeUncalibrated = await getGyroscopeUncalibratedData();
+
     return EnhancedSensorData(
       // Basic sensors
       accelerometer: accelerometer,
@@ -685,6 +819,14 @@ class PlatformSensorDataSource implements SensorDataSource {
       linearAcceleration: linearAcceleration,
       gameRotationVector: gameRotationVector,
       geomagneticRotationVector: geomagneticRotationVector,
+      // New sensors
+      significantMotion: significantMotion,
+      stationaryDetect: stationaryDetect,
+      wakeGesture: wakeGesture,
+      pickupDetect: pickupDetect,
+      accelerometerUncalibrated: accelerometerUncalibrated,
+      magneticFieldUncalibrated: magneticFieldUncalibrated,
+      gyroscopeUncalibrated: gyroscopeUncalibrated,
       timestamp: DateTime.now(),
       tenantId: 'default',
     );
@@ -797,6 +939,51 @@ class PlatformSensorDataSource implements SensorDataSource {
       sensorList.add('Geomagnetic Rotation Vector (not working)');
     } else {
       sensorList.add('Geomagnetic Rotation Vector (simulated)');
+    }
+
+    // Add new sensors with their status
+    if (_significantMotionAvailable && _significantMotionWorking) {
+      sensorList.add('Significant Motion');
+    } else {
+      sensorList.add('Significant Motion (simulated)');
+    }
+
+    if (_stationaryDetectAvailable && _stationaryDetectWorking) {
+      sensorList.add('Stationary Detect');
+    } else {
+      sensorList.add('Stationary Detect (simulated)');
+    }
+
+    if (_wakeGestureAvailable && _wakeGestureWorking) {
+      sensorList.add('Wake Gesture');
+    } else {
+      sensorList.add('Wake Gesture (simulated)');
+    }
+
+    if (_pickupDetectAvailable && _pickupDetectWorking) {
+      sensorList.add('Pickup Detect');
+    } else {
+      sensorList.add('Pickup Detect (simulated)');
+    }
+
+    if (_accelerometerUncalibratedAvailable &&
+        _accelerometerUncalibratedWorking) {
+      sensorList.add('Accelerometer Uncalibrated');
+    } else {
+      sensorList.add('Accelerometer Uncalibrated (simulated)');
+    }
+
+    if (_magneticFieldUncalibratedAvailable &&
+        _magneticFieldUncalibratedWorking) {
+      sensorList.add('Magnetic Field Uncalibrated');
+    } else {
+      sensorList.add('Magnetic Field Uncalibrated (simulated)');
+    }
+
+    if (_gyroscopeUncalibratedAvailable && _gyroscopeUncalibratedWorking) {
+      sensorList.add('Gyroscope Uncalibrated');
+    } else {
+      sensorList.add('Gyroscope Uncalibrated (simulated)');
     }
 
     return sensorList;
@@ -1549,5 +1736,206 @@ class PlatformSensorDataSource implements SensorDataSource {
       return _lastGeomagneticRotationVectorData!;
     }
     return _geomagneticRotationVectorStreamController.stream.first;
+  }
+
+  // Implement new sensor stream methods
+  @override
+  Stream<SignificantMotionData> getSignificantMotionStream() {
+    return _significantMotionStreamController.stream;
+  }
+
+  @override
+  Stream<StationaryDetectData> getStationaryDetectStream() {
+    return _stationaryDetectStreamController.stream;
+  }
+
+  @override
+  Stream<WakeGestureData> getWakeGestureStream() {
+    return _wakeGestureStreamController.stream;
+  }
+
+  @override
+  Stream<PickupDetectData> getPickupDetectStream() {
+    return _pickupDetectStreamController.stream;
+  }
+
+  @override
+  Stream<AccelerometerUncalibratedData> getAccelerometerUncalibratedStream() {
+    return _accelerometerUncalibratedStreamController.stream;
+  }
+
+  @override
+  Stream<MagneticFieldUncalibratedData> getMagneticFieldUncalibratedStream() {
+    return _magneticFieldUncalibratedStreamController.stream;
+  }
+
+  @override
+  Stream<GyroscopeUncalibratedData> getGyroscopeUncalibratedStream() {
+    return _gyroscopeUncalibratedStreamController.stream;
+  }
+
+  // Implement new sensor data fetch methods
+  @override
+  Future<SignificantMotionData?> getSignificantMotionData() async {
+    if (_lastSignificantMotionData != null) {
+      return _lastSignificantMotionData!;
+    }
+    return _significantMotionStreamController.stream.first;
+  }
+
+  @override
+  Future<StationaryDetectData?> getStationaryDetectData() async {
+    if (_lastStationaryDetectData != null) {
+      return _lastStationaryDetectData!;
+    }
+    return _stationaryDetectStreamController.stream.first;
+  }
+
+  @override
+  Future<WakeGestureData?> getWakeGestureData() async {
+    if (_lastWakeGestureData != null) {
+      return _lastWakeGestureData!;
+    }
+    return _wakeGestureStreamController.stream.first;
+  }
+
+  @override
+  Future<PickupDetectData?> getPickupDetectData() async {
+    if (_lastPickupDetectData != null) {
+      return _lastPickupDetectData!;
+    }
+    return _pickupDetectStreamController.stream.first;
+  }
+
+  @override
+  Future<AccelerometerUncalibratedData?>
+  getAccelerometerUncalibratedData() async {
+    if (_lastAccelerometerUncalibratedData != null) {
+      return _lastAccelerometerUncalibratedData!;
+    }
+    return _accelerometerUncalibratedStreamController.stream.first;
+  }
+
+  @override
+  Future<MagneticFieldUncalibratedData?>
+  getMagneticFieldUncalibratedData() async {
+    if (_lastMagneticFieldUncalibratedData != null) {
+      return _lastMagneticFieldUncalibratedData!;
+    }
+    return _magneticFieldUncalibratedStreamController.stream.first;
+  }
+
+  @override
+  Future<GyroscopeUncalibratedData?> getGyroscopeUncalibratedData() async {
+    if (_lastGyroscopeUncalibratedData != null) {
+      return _lastGyroscopeUncalibratedData!;
+    }
+    return _gyroscopeUncalibratedStreamController.stream.first;
+  }
+
+  void _setupMockStreamsForNewSensors() {
+    // Significant Motion
+    Timer.periodic(const Duration(seconds: 10), (timer) {
+      final detected =
+          DateTime.now().second % 15 ==
+          0; // Simulate occasional significant motion
+      final mockData = SignificantMotionData(
+        detected: detected,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      );
+      _lastSignificantMotionData = mockData;
+      _significantMotionStreamController.add(mockData);
+    });
+
+    // Stationary Detect
+    Timer.periodic(const Duration(seconds: 7), (timer) {
+      final isStationary =
+          DateTime.now().second % 20 <
+          15; // Simulate being stationary most of the time
+      final mockData = StationaryDetectData(
+        isStationary: isStationary,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      );
+      _lastStationaryDetectData = mockData;
+      _stationaryDetectStreamController.add(mockData);
+    });
+
+    // Wake Gesture
+    Timer.periodic(const Duration(seconds: 20), (timer) {
+      final detected = DateTime.now().second == 0; // Simulate rare wake gesture
+      final mockData = WakeGestureData(
+        detected: detected,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      );
+      _lastWakeGestureData = mockData;
+      _wakeGestureStreamController.add(mockData);
+    });
+
+    // Pickup Detect
+    Timer.periodic(const Duration(seconds: 8), (timer) {
+      final detected =
+          DateTime.now().second % 30 == 0; // Simulate occasional pickup
+      final mockData = PickupDetectData(
+        detected: detected,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      );
+      _lastPickupDetectData = mockData;
+      _pickupDetectStreamController.add(mockData);
+    });
+
+    // Accelerometer Uncalibrated
+    Timer.periodic(const Duration(milliseconds: 200), (timer) {
+      final time = DateTime.now().millisecondsSinceEpoch / 1000;
+      final mockData = AccelerometerUncalibratedData(
+        x: sin(time * 0.5),
+        y: cos(time * 0.5),
+        z: sin(time * 0.2),
+        xBias: 0.05,
+        yBias: 0.03,
+        zBias: 0.02,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      );
+      _lastAccelerometerUncalibratedData = mockData;
+      _accelerometerUncalibratedStreamController.add(mockData);
+    });
+
+    // Magnetic Field Uncalibrated
+    Timer.periodic(const Duration(milliseconds: 200), (timer) {
+      final time = DateTime.now().millisecondsSinceEpoch / 1000;
+      final mockData = MagneticFieldUncalibratedData(
+        x: 20 + sin(time * 0.1) * 5,
+        y: 40 + cos(time * 0.1) * 3,
+        z: 10 + sin(time * 0.05) * 2,
+        xBias: 1.5,
+        yBias: 2.0,
+        zBias: 0.5,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      );
+      _lastMagneticFieldUncalibratedData = mockData;
+      _magneticFieldUncalibratedStreamController.add(mockData);
+    });
+
+    // Gyroscope Uncalibrated
+    Timer.periodic(const Duration(milliseconds: 200), (timer) {
+      final time = DateTime.now().millisecondsSinceEpoch / 1000;
+      final mockData = GyroscopeUncalibratedData(
+        x: sin(time * 0.3) * 0.5,
+        y: cos(time * 0.3) * 0.5,
+        z: sin(time * 0.15) * 0.3,
+        xDrift: 0.02,
+        yDrift: 0.01,
+        zDrift: 0.015,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      );
+      _lastGyroscopeUncalibratedData = mockData;
+      _gyroscopeUncalibratedStreamController.add(mockData);
+    });
   }
 }

@@ -1024,7 +1024,8 @@ mixin _$CombinedSensorData {
 
 // Basic sensors
  AccelerometerData? get accelerometer; GyroscopeData? get gyroscope; MagnetometerData? get magnetometer; ProximityData? get proximity; LightSensorData? get light; PressureData? get pressure;// Additional sensors
- StepCounterData? get stepCounter; StepDetectorData? get stepDetector; RotationVectorData? get rotationVector; OrientationData? get orientation; GravityData? get gravity; LinearAccelerationData? get linearAcceleration; GameRotationVectorData? get gameRotationVector; GeomagneticRotationVectorData? get geomagneticRotationVector; DateTime get timestamp; String? get tenantId;
+ StepCounterData? get stepCounter; StepDetectorData? get stepDetector; RotationVectorData? get rotationVector; OrientationData? get orientation; GravityData? get gravity; LinearAccelerationData? get linearAcceleration; GameRotationVectorData? get gameRotationVector; GeomagneticRotationVectorData? get geomagneticRotationVector;// New sensors
+ SignificantMotionData? get significantMotion; StationaryDetectData? get stationaryDetect; WakeGestureData? get wakeGesture; PickupDetectData? get pickupDetect; AccelerometerUncalibratedData? get accelerometerUncalibrated; MagneticFieldUncalibratedData? get magneticFieldUncalibrated; GyroscopeUncalibratedData? get gyroscopeUncalibrated; DateTime get timestamp; String? get tenantId;
 /// Create a copy of CombinedSensorData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1037,16 +1038,16 @@ $CombinedSensorDataCopyWith<CombinedSensorData> get copyWith => _$CombinedSensor
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CombinedSensorData&&(identical(other.accelerometer, accelerometer) || other.accelerometer == accelerometer)&&(identical(other.gyroscope, gyroscope) || other.gyroscope == gyroscope)&&(identical(other.magnetometer, magnetometer) || other.magnetometer == magnetometer)&&(identical(other.proximity, proximity) || other.proximity == proximity)&&(identical(other.light, light) || other.light == light)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.stepCounter, stepCounter) || other.stepCounter == stepCounter)&&(identical(other.stepDetector, stepDetector) || other.stepDetector == stepDetector)&&(identical(other.rotationVector, rotationVector) || other.rotationVector == rotationVector)&&(identical(other.orientation, orientation) || other.orientation == orientation)&&(identical(other.gravity, gravity) || other.gravity == gravity)&&(identical(other.linearAcceleration, linearAcceleration) || other.linearAcceleration == linearAcceleration)&&(identical(other.gameRotationVector, gameRotationVector) || other.gameRotationVector == gameRotationVector)&&(identical(other.geomagneticRotationVector, geomagneticRotationVector) || other.geomagneticRotationVector == geomagneticRotationVector)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CombinedSensorData&&(identical(other.accelerometer, accelerometer) || other.accelerometer == accelerometer)&&(identical(other.gyroscope, gyroscope) || other.gyroscope == gyroscope)&&(identical(other.magnetometer, magnetometer) || other.magnetometer == magnetometer)&&(identical(other.proximity, proximity) || other.proximity == proximity)&&(identical(other.light, light) || other.light == light)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.stepCounter, stepCounter) || other.stepCounter == stepCounter)&&(identical(other.stepDetector, stepDetector) || other.stepDetector == stepDetector)&&(identical(other.rotationVector, rotationVector) || other.rotationVector == rotationVector)&&(identical(other.orientation, orientation) || other.orientation == orientation)&&(identical(other.gravity, gravity) || other.gravity == gravity)&&(identical(other.linearAcceleration, linearAcceleration) || other.linearAcceleration == linearAcceleration)&&(identical(other.gameRotationVector, gameRotationVector) || other.gameRotationVector == gameRotationVector)&&(identical(other.geomagneticRotationVector, geomagneticRotationVector) || other.geomagneticRotationVector == geomagneticRotationVector)&&(identical(other.significantMotion, significantMotion) || other.significantMotion == significantMotion)&&(identical(other.stationaryDetect, stationaryDetect) || other.stationaryDetect == stationaryDetect)&&(identical(other.wakeGesture, wakeGesture) || other.wakeGesture == wakeGesture)&&(identical(other.pickupDetect, pickupDetect) || other.pickupDetect == pickupDetect)&&(identical(other.accelerometerUncalibrated, accelerometerUncalibrated) || other.accelerometerUncalibrated == accelerometerUncalibrated)&&(identical(other.magneticFieldUncalibrated, magneticFieldUncalibrated) || other.magneticFieldUncalibrated == magneticFieldUncalibrated)&&(identical(other.gyroscopeUncalibrated, gyroscopeUncalibrated) || other.gyroscopeUncalibrated == gyroscopeUncalibrated)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,accelerometer,gyroscope,magnetometer,proximity,light,pressure,stepCounter,stepDetector,rotationVector,orientation,gravity,linearAcceleration,gameRotationVector,geomagneticRotationVector,timestamp,tenantId);
+int get hashCode => Object.hashAll([runtimeType,accelerometer,gyroscope,magnetometer,proximity,light,pressure,stepCounter,stepDetector,rotationVector,orientation,gravity,linearAcceleration,gameRotationVector,geomagneticRotationVector,significantMotion,stationaryDetect,wakeGesture,pickupDetect,accelerometerUncalibrated,magneticFieldUncalibrated,gyroscopeUncalibrated,timestamp,tenantId]);
 
 @override
 String toString() {
-  return 'CombinedSensorData(accelerometer: $accelerometer, gyroscope: $gyroscope, magnetometer: $magnetometer, proximity: $proximity, light: $light, pressure: $pressure, stepCounter: $stepCounter, stepDetector: $stepDetector, rotationVector: $rotationVector, orientation: $orientation, gravity: $gravity, linearAcceleration: $linearAcceleration, gameRotationVector: $gameRotationVector, geomagneticRotationVector: $geomagneticRotationVector, timestamp: $timestamp, tenantId: $tenantId)';
+  return 'CombinedSensorData(accelerometer: $accelerometer, gyroscope: $gyroscope, magnetometer: $magnetometer, proximity: $proximity, light: $light, pressure: $pressure, stepCounter: $stepCounter, stepDetector: $stepDetector, rotationVector: $rotationVector, orientation: $orientation, gravity: $gravity, linearAcceleration: $linearAcceleration, gameRotationVector: $gameRotationVector, geomagneticRotationVector: $geomagneticRotationVector, significantMotion: $significantMotion, stationaryDetect: $stationaryDetect, wakeGesture: $wakeGesture, pickupDetect: $pickupDetect, accelerometerUncalibrated: $accelerometerUncalibrated, magneticFieldUncalibrated: $magneticFieldUncalibrated, gyroscopeUncalibrated: $gyroscopeUncalibrated, timestamp: $timestamp, tenantId: $tenantId)';
 }
 
 
@@ -1057,11 +1058,11 @@ abstract mixin class $CombinedSensorDataCopyWith<$Res>  {
   factory $CombinedSensorDataCopyWith(CombinedSensorData value, $Res Function(CombinedSensorData) _then) = _$CombinedSensorDataCopyWithImpl;
 @useResult
 $Res call({
- AccelerometerData? accelerometer, GyroscopeData? gyroscope, MagnetometerData? magnetometer, ProximityData? proximity, LightSensorData? light, PressureData? pressure, StepCounterData? stepCounter, StepDetectorData? stepDetector, RotationVectorData? rotationVector, OrientationData? orientation, GravityData? gravity, LinearAccelerationData? linearAcceleration, GameRotationVectorData? gameRotationVector, GeomagneticRotationVectorData? geomagneticRotationVector, DateTime timestamp, String? tenantId
+ AccelerometerData? accelerometer, GyroscopeData? gyroscope, MagnetometerData? magnetometer, ProximityData? proximity, LightSensorData? light, PressureData? pressure, StepCounterData? stepCounter, StepDetectorData? stepDetector, RotationVectorData? rotationVector, OrientationData? orientation, GravityData? gravity, LinearAccelerationData? linearAcceleration, GameRotationVectorData? gameRotationVector, GeomagneticRotationVectorData? geomagneticRotationVector, SignificantMotionData? significantMotion, StationaryDetectData? stationaryDetect, WakeGestureData? wakeGesture, PickupDetectData? pickupDetect, AccelerometerUncalibratedData? accelerometerUncalibrated, MagneticFieldUncalibratedData? magneticFieldUncalibrated, GyroscopeUncalibratedData? gyroscopeUncalibrated, DateTime timestamp, String? tenantId
 });
 
 
-$AccelerometerDataCopyWith<$Res>? get accelerometer;$GyroscopeDataCopyWith<$Res>? get gyroscope;$MagnetometerDataCopyWith<$Res>? get magnetometer;$ProximityDataCopyWith<$Res>? get proximity;$LightSensorDataCopyWith<$Res>? get light;$PressureDataCopyWith<$Res>? get pressure;$StepCounterDataCopyWith<$Res>? get stepCounter;$StepDetectorDataCopyWith<$Res>? get stepDetector;$RotationVectorDataCopyWith<$Res>? get rotationVector;$OrientationDataCopyWith<$Res>? get orientation;$GravityDataCopyWith<$Res>? get gravity;$LinearAccelerationDataCopyWith<$Res>? get linearAcceleration;$GameRotationVectorDataCopyWith<$Res>? get gameRotationVector;$GeomagneticRotationVectorDataCopyWith<$Res>? get geomagneticRotationVector;
+$AccelerometerDataCopyWith<$Res>? get accelerometer;$GyroscopeDataCopyWith<$Res>? get gyroscope;$MagnetometerDataCopyWith<$Res>? get magnetometer;$ProximityDataCopyWith<$Res>? get proximity;$LightSensorDataCopyWith<$Res>? get light;$PressureDataCopyWith<$Res>? get pressure;$StepCounterDataCopyWith<$Res>? get stepCounter;$StepDetectorDataCopyWith<$Res>? get stepDetector;$RotationVectorDataCopyWith<$Res>? get rotationVector;$OrientationDataCopyWith<$Res>? get orientation;$GravityDataCopyWith<$Res>? get gravity;$LinearAccelerationDataCopyWith<$Res>? get linearAcceleration;$GameRotationVectorDataCopyWith<$Res>? get gameRotationVector;$GeomagneticRotationVectorDataCopyWith<$Res>? get geomagneticRotationVector;$SignificantMotionDataCopyWith<$Res>? get significantMotion;$StationaryDetectDataCopyWith<$Res>? get stationaryDetect;$WakeGestureDataCopyWith<$Res>? get wakeGesture;$PickupDetectDataCopyWith<$Res>? get pickupDetect;$AccelerometerUncalibratedDataCopyWith<$Res>? get accelerometerUncalibrated;$MagneticFieldUncalibratedDataCopyWith<$Res>? get magneticFieldUncalibrated;$GyroscopeUncalibratedDataCopyWith<$Res>? get gyroscopeUncalibrated;
 
 }
 /// @nodoc
@@ -1074,7 +1075,7 @@ class _$CombinedSensorDataCopyWithImpl<$Res>
 
 /// Create a copy of CombinedSensorData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? accelerometer = freezed,Object? gyroscope = freezed,Object? magnetometer = freezed,Object? proximity = freezed,Object? light = freezed,Object? pressure = freezed,Object? stepCounter = freezed,Object? stepDetector = freezed,Object? rotationVector = freezed,Object? orientation = freezed,Object? gravity = freezed,Object? linearAcceleration = freezed,Object? gameRotationVector = freezed,Object? geomagneticRotationVector = freezed,Object? timestamp = null,Object? tenantId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? accelerometer = freezed,Object? gyroscope = freezed,Object? magnetometer = freezed,Object? proximity = freezed,Object? light = freezed,Object? pressure = freezed,Object? stepCounter = freezed,Object? stepDetector = freezed,Object? rotationVector = freezed,Object? orientation = freezed,Object? gravity = freezed,Object? linearAcceleration = freezed,Object? gameRotationVector = freezed,Object? geomagneticRotationVector = freezed,Object? significantMotion = freezed,Object? stationaryDetect = freezed,Object? wakeGesture = freezed,Object? pickupDetect = freezed,Object? accelerometerUncalibrated = freezed,Object? magneticFieldUncalibrated = freezed,Object? gyroscopeUncalibrated = freezed,Object? timestamp = null,Object? tenantId = freezed,}) {
   return _then(_self.copyWith(
 accelerometer: freezed == accelerometer ? _self.accelerometer : accelerometer // ignore: cast_nullable_to_non_nullable
 as AccelerometerData?,gyroscope: freezed == gyroscope ? _self.gyroscope : gyroscope // ignore: cast_nullable_to_non_nullable
@@ -1090,7 +1091,14 @@ as OrientationData?,gravity: freezed == gravity ? _self.gravity : gravity // ign
 as GravityData?,linearAcceleration: freezed == linearAcceleration ? _self.linearAcceleration : linearAcceleration // ignore: cast_nullable_to_non_nullable
 as LinearAccelerationData?,gameRotationVector: freezed == gameRotationVector ? _self.gameRotationVector : gameRotationVector // ignore: cast_nullable_to_non_nullable
 as GameRotationVectorData?,geomagneticRotationVector: freezed == geomagneticRotationVector ? _self.geomagneticRotationVector : geomagneticRotationVector // ignore: cast_nullable_to_non_nullable
-as GeomagneticRotationVectorData?,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as GeomagneticRotationVectorData?,significantMotion: freezed == significantMotion ? _self.significantMotion : significantMotion // ignore: cast_nullable_to_non_nullable
+as SignificantMotionData?,stationaryDetect: freezed == stationaryDetect ? _self.stationaryDetect : stationaryDetect // ignore: cast_nullable_to_non_nullable
+as StationaryDetectData?,wakeGesture: freezed == wakeGesture ? _self.wakeGesture : wakeGesture // ignore: cast_nullable_to_non_nullable
+as WakeGestureData?,pickupDetect: freezed == pickupDetect ? _self.pickupDetect : pickupDetect // ignore: cast_nullable_to_non_nullable
+as PickupDetectData?,accelerometerUncalibrated: freezed == accelerometerUncalibrated ? _self.accelerometerUncalibrated : accelerometerUncalibrated // ignore: cast_nullable_to_non_nullable
+as AccelerometerUncalibratedData?,magneticFieldUncalibrated: freezed == magneticFieldUncalibrated ? _self.magneticFieldUncalibrated : magneticFieldUncalibrated // ignore: cast_nullable_to_non_nullable
+as MagneticFieldUncalibratedData?,gyroscopeUncalibrated: freezed == gyroscopeUncalibrated ? _self.gyroscopeUncalibrated : gyroscopeUncalibrated // ignore: cast_nullable_to_non_nullable
+as GyroscopeUncalibratedData?,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,tenantId: freezed == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -1263,6 +1271,90 @@ $GeomagneticRotationVectorDataCopyWith<$Res>? get geomagneticRotationVector {
   return $GeomagneticRotationVectorDataCopyWith<$Res>(_self.geomagneticRotationVector!, (value) {
     return _then(_self.copyWith(geomagneticRotationVector: value));
   });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SignificantMotionDataCopyWith<$Res>? get significantMotion {
+    if (_self.significantMotion == null) {
+    return null;
+  }
+
+  return $SignificantMotionDataCopyWith<$Res>(_self.significantMotion!, (value) {
+    return _then(_self.copyWith(significantMotion: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$StationaryDetectDataCopyWith<$Res>? get stationaryDetect {
+    if (_self.stationaryDetect == null) {
+    return null;
+  }
+
+  return $StationaryDetectDataCopyWith<$Res>(_self.stationaryDetect!, (value) {
+    return _then(_self.copyWith(stationaryDetect: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$WakeGestureDataCopyWith<$Res>? get wakeGesture {
+    if (_self.wakeGesture == null) {
+    return null;
+  }
+
+  return $WakeGestureDataCopyWith<$Res>(_self.wakeGesture!, (value) {
+    return _then(_self.copyWith(wakeGesture: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PickupDetectDataCopyWith<$Res>? get pickupDetect {
+    if (_self.pickupDetect == null) {
+    return null;
+  }
+
+  return $PickupDetectDataCopyWith<$Res>(_self.pickupDetect!, (value) {
+    return _then(_self.copyWith(pickupDetect: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AccelerometerUncalibratedDataCopyWith<$Res>? get accelerometerUncalibrated {
+    if (_self.accelerometerUncalibrated == null) {
+    return null;
+  }
+
+  return $AccelerometerUncalibratedDataCopyWith<$Res>(_self.accelerometerUncalibrated!, (value) {
+    return _then(_self.copyWith(accelerometerUncalibrated: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MagneticFieldUncalibratedDataCopyWith<$Res>? get magneticFieldUncalibrated {
+    if (_self.magneticFieldUncalibrated == null) {
+    return null;
+  }
+
+  return $MagneticFieldUncalibratedDataCopyWith<$Res>(_self.magneticFieldUncalibrated!, (value) {
+    return _then(_self.copyWith(magneticFieldUncalibrated: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GyroscopeUncalibratedDataCopyWith<$Res>? get gyroscopeUncalibrated {
+    if (_self.gyroscopeUncalibrated == null) {
+    return null;
+  }
+
+  return $GyroscopeUncalibratedDataCopyWith<$Res>(_self.gyroscopeUncalibrated!, (value) {
+    return _then(_self.copyWith(gyroscopeUncalibrated: value));
+  });
 }
 }
 
@@ -1271,7 +1363,7 @@ $GeomagneticRotationVectorDataCopyWith<$Res>? get geomagneticRotationVector {
 @JsonSerializable()
 
 class _CombinedSensorData implements CombinedSensorData {
-  const _CombinedSensorData({this.accelerometer, this.gyroscope, this.magnetometer, this.proximity, this.light, this.pressure, this.stepCounter, this.stepDetector, this.rotationVector, this.orientation, this.gravity, this.linearAcceleration, this.gameRotationVector, this.geomagneticRotationVector, required this.timestamp, this.tenantId});
+  const _CombinedSensorData({this.accelerometer, this.gyroscope, this.magnetometer, this.proximity, this.light, this.pressure, this.stepCounter, this.stepDetector, this.rotationVector, this.orientation, this.gravity, this.linearAcceleration, this.gameRotationVector, this.geomagneticRotationVector, this.significantMotion, this.stationaryDetect, this.wakeGesture, this.pickupDetect, this.accelerometerUncalibrated, this.magneticFieldUncalibrated, this.gyroscopeUncalibrated, required this.timestamp, this.tenantId});
   factory _CombinedSensorData.fromJson(Map<String, dynamic> json) => _$CombinedSensorDataFromJson(json);
 
 // Basic sensors
@@ -1290,6 +1382,14 @@ class _CombinedSensorData implements CombinedSensorData {
 @override final  LinearAccelerationData? linearAcceleration;
 @override final  GameRotationVectorData? gameRotationVector;
 @override final  GeomagneticRotationVectorData? geomagneticRotationVector;
+// New sensors
+@override final  SignificantMotionData? significantMotion;
+@override final  StationaryDetectData? stationaryDetect;
+@override final  WakeGestureData? wakeGesture;
+@override final  PickupDetectData? pickupDetect;
+@override final  AccelerometerUncalibratedData? accelerometerUncalibrated;
+@override final  MagneticFieldUncalibratedData? magneticFieldUncalibrated;
+@override final  GyroscopeUncalibratedData? gyroscopeUncalibrated;
 @override final  DateTime timestamp;
 @override final  String? tenantId;
 
@@ -1306,16 +1406,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CombinedSensorData&&(identical(other.accelerometer, accelerometer) || other.accelerometer == accelerometer)&&(identical(other.gyroscope, gyroscope) || other.gyroscope == gyroscope)&&(identical(other.magnetometer, magnetometer) || other.magnetometer == magnetometer)&&(identical(other.proximity, proximity) || other.proximity == proximity)&&(identical(other.light, light) || other.light == light)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.stepCounter, stepCounter) || other.stepCounter == stepCounter)&&(identical(other.stepDetector, stepDetector) || other.stepDetector == stepDetector)&&(identical(other.rotationVector, rotationVector) || other.rotationVector == rotationVector)&&(identical(other.orientation, orientation) || other.orientation == orientation)&&(identical(other.gravity, gravity) || other.gravity == gravity)&&(identical(other.linearAcceleration, linearAcceleration) || other.linearAcceleration == linearAcceleration)&&(identical(other.gameRotationVector, gameRotationVector) || other.gameRotationVector == gameRotationVector)&&(identical(other.geomagneticRotationVector, geomagneticRotationVector) || other.geomagneticRotationVector == geomagneticRotationVector)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CombinedSensorData&&(identical(other.accelerometer, accelerometer) || other.accelerometer == accelerometer)&&(identical(other.gyroscope, gyroscope) || other.gyroscope == gyroscope)&&(identical(other.magnetometer, magnetometer) || other.magnetometer == magnetometer)&&(identical(other.proximity, proximity) || other.proximity == proximity)&&(identical(other.light, light) || other.light == light)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.stepCounter, stepCounter) || other.stepCounter == stepCounter)&&(identical(other.stepDetector, stepDetector) || other.stepDetector == stepDetector)&&(identical(other.rotationVector, rotationVector) || other.rotationVector == rotationVector)&&(identical(other.orientation, orientation) || other.orientation == orientation)&&(identical(other.gravity, gravity) || other.gravity == gravity)&&(identical(other.linearAcceleration, linearAcceleration) || other.linearAcceleration == linearAcceleration)&&(identical(other.gameRotationVector, gameRotationVector) || other.gameRotationVector == gameRotationVector)&&(identical(other.geomagneticRotationVector, geomagneticRotationVector) || other.geomagneticRotationVector == geomagneticRotationVector)&&(identical(other.significantMotion, significantMotion) || other.significantMotion == significantMotion)&&(identical(other.stationaryDetect, stationaryDetect) || other.stationaryDetect == stationaryDetect)&&(identical(other.wakeGesture, wakeGesture) || other.wakeGesture == wakeGesture)&&(identical(other.pickupDetect, pickupDetect) || other.pickupDetect == pickupDetect)&&(identical(other.accelerometerUncalibrated, accelerometerUncalibrated) || other.accelerometerUncalibrated == accelerometerUncalibrated)&&(identical(other.magneticFieldUncalibrated, magneticFieldUncalibrated) || other.magneticFieldUncalibrated == magneticFieldUncalibrated)&&(identical(other.gyroscopeUncalibrated, gyroscopeUncalibrated) || other.gyroscopeUncalibrated == gyroscopeUncalibrated)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,accelerometer,gyroscope,magnetometer,proximity,light,pressure,stepCounter,stepDetector,rotationVector,orientation,gravity,linearAcceleration,gameRotationVector,geomagneticRotationVector,timestamp,tenantId);
+int get hashCode => Object.hashAll([runtimeType,accelerometer,gyroscope,magnetometer,proximity,light,pressure,stepCounter,stepDetector,rotationVector,orientation,gravity,linearAcceleration,gameRotationVector,geomagneticRotationVector,significantMotion,stationaryDetect,wakeGesture,pickupDetect,accelerometerUncalibrated,magneticFieldUncalibrated,gyroscopeUncalibrated,timestamp,tenantId]);
 
 @override
 String toString() {
-  return 'CombinedSensorData(accelerometer: $accelerometer, gyroscope: $gyroscope, magnetometer: $magnetometer, proximity: $proximity, light: $light, pressure: $pressure, stepCounter: $stepCounter, stepDetector: $stepDetector, rotationVector: $rotationVector, orientation: $orientation, gravity: $gravity, linearAcceleration: $linearAcceleration, gameRotationVector: $gameRotationVector, geomagneticRotationVector: $geomagneticRotationVector, timestamp: $timestamp, tenantId: $tenantId)';
+  return 'CombinedSensorData(accelerometer: $accelerometer, gyroscope: $gyroscope, magnetometer: $magnetometer, proximity: $proximity, light: $light, pressure: $pressure, stepCounter: $stepCounter, stepDetector: $stepDetector, rotationVector: $rotationVector, orientation: $orientation, gravity: $gravity, linearAcceleration: $linearAcceleration, gameRotationVector: $gameRotationVector, geomagneticRotationVector: $geomagneticRotationVector, significantMotion: $significantMotion, stationaryDetect: $stationaryDetect, wakeGesture: $wakeGesture, pickupDetect: $pickupDetect, accelerometerUncalibrated: $accelerometerUncalibrated, magneticFieldUncalibrated: $magneticFieldUncalibrated, gyroscopeUncalibrated: $gyroscopeUncalibrated, timestamp: $timestamp, tenantId: $tenantId)';
 }
 
 
@@ -1326,11 +1426,11 @@ abstract mixin class _$CombinedSensorDataCopyWith<$Res> implements $CombinedSens
   factory _$CombinedSensorDataCopyWith(_CombinedSensorData value, $Res Function(_CombinedSensorData) _then) = __$CombinedSensorDataCopyWithImpl;
 @override @useResult
 $Res call({
- AccelerometerData? accelerometer, GyroscopeData? gyroscope, MagnetometerData? magnetometer, ProximityData? proximity, LightSensorData? light, PressureData? pressure, StepCounterData? stepCounter, StepDetectorData? stepDetector, RotationVectorData? rotationVector, OrientationData? orientation, GravityData? gravity, LinearAccelerationData? linearAcceleration, GameRotationVectorData? gameRotationVector, GeomagneticRotationVectorData? geomagneticRotationVector, DateTime timestamp, String? tenantId
+ AccelerometerData? accelerometer, GyroscopeData? gyroscope, MagnetometerData? magnetometer, ProximityData? proximity, LightSensorData? light, PressureData? pressure, StepCounterData? stepCounter, StepDetectorData? stepDetector, RotationVectorData? rotationVector, OrientationData? orientation, GravityData? gravity, LinearAccelerationData? linearAcceleration, GameRotationVectorData? gameRotationVector, GeomagneticRotationVectorData? geomagneticRotationVector, SignificantMotionData? significantMotion, StationaryDetectData? stationaryDetect, WakeGestureData? wakeGesture, PickupDetectData? pickupDetect, AccelerometerUncalibratedData? accelerometerUncalibrated, MagneticFieldUncalibratedData? magneticFieldUncalibrated, GyroscopeUncalibratedData? gyroscopeUncalibrated, DateTime timestamp, String? tenantId
 });
 
 
-@override $AccelerometerDataCopyWith<$Res>? get accelerometer;@override $GyroscopeDataCopyWith<$Res>? get gyroscope;@override $MagnetometerDataCopyWith<$Res>? get magnetometer;@override $ProximityDataCopyWith<$Res>? get proximity;@override $LightSensorDataCopyWith<$Res>? get light;@override $PressureDataCopyWith<$Res>? get pressure;@override $StepCounterDataCopyWith<$Res>? get stepCounter;@override $StepDetectorDataCopyWith<$Res>? get stepDetector;@override $RotationVectorDataCopyWith<$Res>? get rotationVector;@override $OrientationDataCopyWith<$Res>? get orientation;@override $GravityDataCopyWith<$Res>? get gravity;@override $LinearAccelerationDataCopyWith<$Res>? get linearAcceleration;@override $GameRotationVectorDataCopyWith<$Res>? get gameRotationVector;@override $GeomagneticRotationVectorDataCopyWith<$Res>? get geomagneticRotationVector;
+@override $AccelerometerDataCopyWith<$Res>? get accelerometer;@override $GyroscopeDataCopyWith<$Res>? get gyroscope;@override $MagnetometerDataCopyWith<$Res>? get magnetometer;@override $ProximityDataCopyWith<$Res>? get proximity;@override $LightSensorDataCopyWith<$Res>? get light;@override $PressureDataCopyWith<$Res>? get pressure;@override $StepCounterDataCopyWith<$Res>? get stepCounter;@override $StepDetectorDataCopyWith<$Res>? get stepDetector;@override $RotationVectorDataCopyWith<$Res>? get rotationVector;@override $OrientationDataCopyWith<$Res>? get orientation;@override $GravityDataCopyWith<$Res>? get gravity;@override $LinearAccelerationDataCopyWith<$Res>? get linearAcceleration;@override $GameRotationVectorDataCopyWith<$Res>? get gameRotationVector;@override $GeomagneticRotationVectorDataCopyWith<$Res>? get geomagneticRotationVector;@override $SignificantMotionDataCopyWith<$Res>? get significantMotion;@override $StationaryDetectDataCopyWith<$Res>? get stationaryDetect;@override $WakeGestureDataCopyWith<$Res>? get wakeGesture;@override $PickupDetectDataCopyWith<$Res>? get pickupDetect;@override $AccelerometerUncalibratedDataCopyWith<$Res>? get accelerometerUncalibrated;@override $MagneticFieldUncalibratedDataCopyWith<$Res>? get magneticFieldUncalibrated;@override $GyroscopeUncalibratedDataCopyWith<$Res>? get gyroscopeUncalibrated;
 
 }
 /// @nodoc
@@ -1343,7 +1443,7 @@ class __$CombinedSensorDataCopyWithImpl<$Res>
 
 /// Create a copy of CombinedSensorData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? accelerometer = freezed,Object? gyroscope = freezed,Object? magnetometer = freezed,Object? proximity = freezed,Object? light = freezed,Object? pressure = freezed,Object? stepCounter = freezed,Object? stepDetector = freezed,Object? rotationVector = freezed,Object? orientation = freezed,Object? gravity = freezed,Object? linearAcceleration = freezed,Object? gameRotationVector = freezed,Object? geomagneticRotationVector = freezed,Object? timestamp = null,Object? tenantId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? accelerometer = freezed,Object? gyroscope = freezed,Object? magnetometer = freezed,Object? proximity = freezed,Object? light = freezed,Object? pressure = freezed,Object? stepCounter = freezed,Object? stepDetector = freezed,Object? rotationVector = freezed,Object? orientation = freezed,Object? gravity = freezed,Object? linearAcceleration = freezed,Object? gameRotationVector = freezed,Object? geomagneticRotationVector = freezed,Object? significantMotion = freezed,Object? stationaryDetect = freezed,Object? wakeGesture = freezed,Object? pickupDetect = freezed,Object? accelerometerUncalibrated = freezed,Object? magneticFieldUncalibrated = freezed,Object? gyroscopeUncalibrated = freezed,Object? timestamp = null,Object? tenantId = freezed,}) {
   return _then(_CombinedSensorData(
 accelerometer: freezed == accelerometer ? _self.accelerometer : accelerometer // ignore: cast_nullable_to_non_nullable
 as AccelerometerData?,gyroscope: freezed == gyroscope ? _self.gyroscope : gyroscope // ignore: cast_nullable_to_non_nullable
@@ -1359,7 +1459,14 @@ as OrientationData?,gravity: freezed == gravity ? _self.gravity : gravity // ign
 as GravityData?,linearAcceleration: freezed == linearAcceleration ? _self.linearAcceleration : linearAcceleration // ignore: cast_nullable_to_non_nullable
 as LinearAccelerationData?,gameRotationVector: freezed == gameRotationVector ? _self.gameRotationVector : gameRotationVector // ignore: cast_nullable_to_non_nullable
 as GameRotationVectorData?,geomagneticRotationVector: freezed == geomagneticRotationVector ? _self.geomagneticRotationVector : geomagneticRotationVector // ignore: cast_nullable_to_non_nullable
-as GeomagneticRotationVectorData?,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as GeomagneticRotationVectorData?,significantMotion: freezed == significantMotion ? _self.significantMotion : significantMotion // ignore: cast_nullable_to_non_nullable
+as SignificantMotionData?,stationaryDetect: freezed == stationaryDetect ? _self.stationaryDetect : stationaryDetect // ignore: cast_nullable_to_non_nullable
+as StationaryDetectData?,wakeGesture: freezed == wakeGesture ? _self.wakeGesture : wakeGesture // ignore: cast_nullable_to_non_nullable
+as WakeGestureData?,pickupDetect: freezed == pickupDetect ? _self.pickupDetect : pickupDetect // ignore: cast_nullable_to_non_nullable
+as PickupDetectData?,accelerometerUncalibrated: freezed == accelerometerUncalibrated ? _self.accelerometerUncalibrated : accelerometerUncalibrated // ignore: cast_nullable_to_non_nullable
+as AccelerometerUncalibratedData?,magneticFieldUncalibrated: freezed == magneticFieldUncalibrated ? _self.magneticFieldUncalibrated : magneticFieldUncalibrated // ignore: cast_nullable_to_non_nullable
+as MagneticFieldUncalibratedData?,gyroscopeUncalibrated: freezed == gyroscopeUncalibrated ? _self.gyroscopeUncalibrated : gyroscopeUncalibrated // ignore: cast_nullable_to_non_nullable
+as GyroscopeUncalibratedData?,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,tenantId: freezed == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -1532,6 +1639,90 @@ $GeomagneticRotationVectorDataCopyWith<$Res>? get geomagneticRotationVector {
 
   return $GeomagneticRotationVectorDataCopyWith<$Res>(_self.geomagneticRotationVector!, (value) {
     return _then(_self.copyWith(geomagneticRotationVector: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SignificantMotionDataCopyWith<$Res>? get significantMotion {
+    if (_self.significantMotion == null) {
+    return null;
+  }
+
+  return $SignificantMotionDataCopyWith<$Res>(_self.significantMotion!, (value) {
+    return _then(_self.copyWith(significantMotion: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$StationaryDetectDataCopyWith<$Res>? get stationaryDetect {
+    if (_self.stationaryDetect == null) {
+    return null;
+  }
+
+  return $StationaryDetectDataCopyWith<$Res>(_self.stationaryDetect!, (value) {
+    return _then(_self.copyWith(stationaryDetect: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$WakeGestureDataCopyWith<$Res>? get wakeGesture {
+    if (_self.wakeGesture == null) {
+    return null;
+  }
+
+  return $WakeGestureDataCopyWith<$Res>(_self.wakeGesture!, (value) {
+    return _then(_self.copyWith(wakeGesture: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PickupDetectDataCopyWith<$Res>? get pickupDetect {
+    if (_self.pickupDetect == null) {
+    return null;
+  }
+
+  return $PickupDetectDataCopyWith<$Res>(_self.pickupDetect!, (value) {
+    return _then(_self.copyWith(pickupDetect: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AccelerometerUncalibratedDataCopyWith<$Res>? get accelerometerUncalibrated {
+    if (_self.accelerometerUncalibrated == null) {
+    return null;
+  }
+
+  return $AccelerometerUncalibratedDataCopyWith<$Res>(_self.accelerometerUncalibrated!, (value) {
+    return _then(_self.copyWith(accelerometerUncalibrated: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MagneticFieldUncalibratedDataCopyWith<$Res>? get magneticFieldUncalibrated {
+    if (_self.magneticFieldUncalibrated == null) {
+    return null;
+  }
+
+  return $MagneticFieldUncalibratedDataCopyWith<$Res>(_self.magneticFieldUncalibrated!, (value) {
+    return _then(_self.copyWith(magneticFieldUncalibrated: value));
+  });
+}/// Create a copy of CombinedSensorData
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GyroscopeUncalibratedDataCopyWith<$Res>? get gyroscopeUncalibrated {
+    if (_self.gyroscopeUncalibrated == null) {
+    return null;
+  }
+
+  return $GyroscopeUncalibratedDataCopyWith<$Res>(_self.gyroscopeUncalibrated!, (value) {
+    return _then(_self.copyWith(gyroscopeUncalibrated: value));
   });
 }
 }

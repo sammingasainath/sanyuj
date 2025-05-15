@@ -4,157 +4,227 @@ import 'package:sensor_api/domain/entities/additional_sensors.dart';
 import 'package:sensor_api/domain/repositories/sensor_repository.dart';
 
 class SensorRepositoryImpl implements SensorRepository {
-  final SensorDataSource dataSource;
+  final SensorDataSource _dataSource;
 
-  SensorRepositoryImpl(this.dataSource);
+  SensorRepositoryImpl(this._dataSource);
 
   @override
   Stream<AccelerometerData> getAccelerometerStream() {
-    return dataSource.getAccelerometerStream();
+    return _dataSource.getAccelerometerStream();
   }
 
   @override
   Stream<GyroscopeData> getGyroscopeStream() {
-    return dataSource.getGyroscopeStream();
+    return _dataSource.getGyroscopeStream();
   }
 
   @override
   Stream<MagnetometerData> getMagnetometerStream() {
-    return dataSource.getMagnetometerStream();
+    return _dataSource.getMagnetometerStream();
   }
 
   @override
   Stream<ProximityData> getProximityStream() {
-    return dataSource.getProximityStream();
+    return _dataSource.getProximityStream();
   }
 
   @override
   Stream<LightSensorData> getLightStream() {
-    return dataSource.getLightStream();
+    return _dataSource.getLightStream();
   }
 
   @override
   Stream<PressureData> getPressureStream() {
-    return dataSource.getPressureStream();
+    return _dataSource.getPressureStream();
   }
 
   @override
   Stream<StepCounterData> getStepCounterStream() {
-    return dataSource.getStepCounterStream();
+    return _dataSource.getStepCounterStream();
   }
 
   @override
   Stream<StepDetectorData> getStepDetectorStream() {
-    return dataSource.getStepDetectorStream();
+    return _dataSource.getStepDetectorStream();
   }
 
   @override
   Stream<RotationVectorData> getRotationVectorStream() {
-    return dataSource.getRotationVectorStream();
+    return _dataSource.getRotationVectorStream();
   }
 
   @override
   Stream<OrientationData> getOrientationStream() {
-    return dataSource.getOrientationStream();
+    return _dataSource.getOrientationStream();
   }
 
   @override
   Stream<GravityData> getGravityStream() {
-    return dataSource.getGravityStream();
+    return _dataSource.getGravityStream();
   }
 
   @override
   Stream<LinearAccelerationData> getLinearAccelerationStream() {
-    return dataSource.getLinearAccelerationStream();
+    return _dataSource.getLinearAccelerationStream();
   }
 
   @override
   Stream<GameRotationVectorData> getGameRotationVectorStream() {
-    return dataSource.getGameRotationVectorStream();
+    return _dataSource.getGameRotationVectorStream();
   }
 
   @override
   Stream<GeomagneticRotationVectorData> getGeomagneticRotationVectorStream() {
-    return dataSource.getGeomagneticRotationVectorStream();
+    return _dataSource.getGeomagneticRotationVectorStream();
+  }
+
+  @override
+  Stream<SignificantMotionData> getSignificantMotionStream() {
+    return _dataSource.getSignificantMotionStream();
+  }
+
+  @override
+  Stream<StationaryDetectData> getStationaryDetectStream() {
+    return _dataSource.getStationaryDetectStream();
+  }
+
+  @override
+  Stream<WakeGestureData> getWakeGestureStream() {
+    return _dataSource.getWakeGestureStream();
+  }
+
+  @override
+  Stream<PickupDetectData> getPickupDetectStream() {
+    return _dataSource.getPickupDetectStream();
+  }
+
+  @override
+  Stream<AccelerometerUncalibratedData> getAccelerometerUncalibratedStream() {
+    return _dataSource.getAccelerometerUncalibratedStream();
+  }
+
+  @override
+  Stream<MagneticFieldUncalibratedData> getMagneticFieldUncalibratedStream() {
+    return _dataSource.getMagneticFieldUncalibratedStream();
+  }
+
+  @override
+  Stream<GyroscopeUncalibratedData> getGyroscopeUncalibratedStream() {
+    return _dataSource.getGyroscopeUncalibratedStream();
   }
 
   @override
   Future<AccelerometerData> getAccelerometerData() {
-    return dataSource.getAccelerometerData();
+    return _dataSource.getAccelerometerData();
   }
 
   @override
   Future<GyroscopeData> getGyroscopeData() {
-    return dataSource.getGyroscopeData();
+    return _dataSource.getGyroscopeData();
   }
 
   @override
   Future<MagnetometerData> getMagnetometerData() {
-    return dataSource.getMagnetometerData();
+    return _dataSource.getMagnetometerData();
   }
 
   @override
   Future<ProximityData?> getProximityData() {
-    return dataSource.getProximityData();
+    return _dataSource.getProximityData();
   }
 
   @override
   Future<LightSensorData?> getLightData() {
-    return dataSource.getLightData();
+    return _dataSource.getLightData();
   }
 
   @override
   Future<PressureData?> getPressureData() {
-    return dataSource.getPressureData();
+    return _dataSource.getPressureData();
   }
 
   @override
   Future<StepCounterData?> getStepCounterData() {
-    return dataSource.getStepCounterData();
+    return _dataSource.getStepCounterData();
   }
 
   @override
   Future<StepDetectorData?> getStepDetectorData() {
-    return dataSource.getStepDetectorData();
+    return _dataSource.getStepDetectorData();
   }
 
   @override
   Future<RotationVectorData?> getRotationVectorData() {
-    return dataSource.getRotationVectorData();
+    return _dataSource.getRotationVectorData();
   }
 
   @override
   Future<OrientationData?> getOrientationData() {
-    return dataSource.getOrientationData();
+    return _dataSource.getOrientationData();
   }
 
   @override
   Future<GravityData?> getGravityData() {
-    return dataSource.getGravityData();
+    return _dataSource.getGravityData();
   }
 
   @override
   Future<LinearAccelerationData?> getLinearAccelerationData() {
-    return dataSource.getLinearAccelerationData();
+    return _dataSource.getLinearAccelerationData();
   }
 
   @override
   Future<GameRotationVectorData?> getGameRotationVectorData() {
-    return dataSource.getGameRotationVectorData();
+    return _dataSource.getGameRotationVectorData();
   }
 
   @override
   Future<GeomagneticRotationVectorData?> getGeomagneticRotationVectorData() {
-    return dataSource.getGeomagneticRotationVectorData();
+    return _dataSource.getGeomagneticRotationVectorData();
+  }
+
+  @override
+  Future<SignificantMotionData?> getSignificantMotionData() {
+    return _dataSource.getSignificantMotionData();
+  }
+
+  @override
+  Future<StationaryDetectData?> getStationaryDetectData() {
+    return _dataSource.getStationaryDetectData();
+  }
+
+  @override
+  Future<WakeGestureData?> getWakeGestureData() {
+    return _dataSource.getWakeGestureData();
+  }
+
+  @override
+  Future<PickupDetectData?> getPickupDetectData() {
+    return _dataSource.getPickupDetectData();
+  }
+
+  @override
+  Future<AccelerometerUncalibratedData?> getAccelerometerUncalibratedData() {
+    return _dataSource.getAccelerometerUncalibratedData();
+  }
+
+  @override
+  Future<MagneticFieldUncalibratedData?> getMagneticFieldUncalibratedData() {
+    return _dataSource.getMagneticFieldUncalibratedData();
+  }
+
+  @override
+  Future<GyroscopeUncalibratedData?> getGyroscopeUncalibratedData() {
+    return _dataSource.getGyroscopeUncalibratedData();
   }
 
   @override
   Future<CombinedSensorData> getCombinedSensorData() {
-    return dataSource.getCombinedSensorData();
+    return _dataSource.getCombinedSensorData();
   }
 
   @override
   Future<List<String>> getAvailableSensors() {
-    return dataSource.getAvailableSensors();
+    return _dataSource.getAvailableSensors();
   }
 }

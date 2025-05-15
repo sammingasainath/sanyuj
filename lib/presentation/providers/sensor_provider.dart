@@ -267,6 +267,22 @@ final apiServerProvider = Provider<ApiServer>((ref) {
     getGeomagneticRotationVectorData: ref.watch(
       getGeomagneticRotationVectorDataUseCaseProvider,
     ),
+    // New sensors
+    getSignificantMotionData: ref.watch(
+      getSignificantMotionDataUseCaseProvider,
+    ),
+    getStationaryDetectData: ref.watch(getStationaryDetectDataUseCaseProvider),
+    getWakeGestureData: ref.watch(getWakeGestureDataUseCaseProvider),
+    getPickupDetectData: ref.watch(getPickupDetectDataUseCaseProvider),
+    getAccelerometerUncalibratedData: ref.watch(
+      getAccelerometerUncalibratedDataUseCaseProvider,
+    ),
+    getMagneticFieldUncalibratedData: ref.watch(
+      getMagneticFieldUncalibratedDataUseCaseProvider,
+    ),
+    getGyroscopeUncalibratedData: ref.watch(
+      getGyroscopeUncalibratedDataUseCaseProvider,
+    ),
   );
 });
 
@@ -300,3 +316,138 @@ final pressureStreamProvider = StreamProvider<PressureData>((ref) {
   final useCase = ref.watch(getPressureStreamUseCaseProvider);
   return useCase();
 });
+
+// New sensor stream providers
+final significantMotionStreamProvider = StreamProvider<SignificantMotionData>((
+  ref,
+) {
+  final useCase = ref.watch(getSignificantMotionStreamUseCaseProvider);
+  return useCase();
+});
+
+final stationaryDetectStreamProvider = StreamProvider<StationaryDetectData>((
+  ref,
+) {
+  final useCase = ref.watch(getStationaryDetectStreamUseCaseProvider);
+  return useCase();
+});
+
+final wakeGestureStreamProvider = StreamProvider<WakeGestureData>((ref) {
+  final useCase = ref.watch(getWakeGestureStreamUseCaseProvider);
+  return useCase();
+});
+
+final pickupDetectStreamProvider = StreamProvider<PickupDetectData>((ref) {
+  final useCase = ref.watch(getPickupDetectStreamUseCaseProvider);
+  return useCase();
+});
+
+final accelerometerUncalibratedStreamProvider =
+    StreamProvider<AccelerometerUncalibratedData>((ref) {
+      final useCase = ref.watch(
+        getAccelerometerUncalibratedStreamUseCaseProvider,
+      );
+      return useCase();
+    });
+
+final magneticFieldUncalibratedStreamProvider =
+    StreamProvider<MagneticFieldUncalibratedData>((ref) {
+      final useCase = ref.watch(
+        getMagneticFieldUncalibratedStreamUseCaseProvider,
+      );
+      return useCase();
+    });
+
+final gyroscopeUncalibratedStreamProvider =
+    StreamProvider<GyroscopeUncalibratedData>((ref) {
+      final useCase = ref.watch(getGyroscopeUncalibratedStreamUseCaseProvider);
+      return useCase();
+    });
+
+// New sensor UseCase providers
+final getSignificantMotionStreamUseCaseProvider =
+    Provider<GetSignificantMotionStreamUseCase>((ref) {
+      final repository = ref.watch(sensorRepositoryProvider);
+      return GetSignificantMotionStreamUseCase(repository);
+    });
+
+final getStationaryDetectStreamUseCaseProvider =
+    Provider<GetStationaryDetectStreamUseCase>((ref) {
+      final repository = ref.watch(sensorRepositoryProvider);
+      return GetStationaryDetectStreamUseCase(repository);
+    });
+
+final getWakeGestureStreamUseCaseProvider =
+    Provider<GetWakeGestureStreamUseCase>((ref) {
+      final repository = ref.watch(sensorRepositoryProvider);
+      return GetWakeGestureStreamUseCase(repository);
+    });
+
+final getPickupDetectStreamUseCaseProvider =
+    Provider<GetPickupDetectStreamUseCase>((ref) {
+      final repository = ref.watch(sensorRepositoryProvider);
+      return GetPickupDetectStreamUseCase(repository);
+    });
+
+final getAccelerometerUncalibratedStreamUseCaseProvider =
+    Provider<GetAccelerometerUncalibratedStreamUseCase>((ref) {
+      final repository = ref.watch(sensorRepositoryProvider);
+      return GetAccelerometerUncalibratedStreamUseCase(repository);
+    });
+
+final getMagneticFieldUncalibratedStreamUseCaseProvider =
+    Provider<GetMagneticFieldUncalibratedStreamUseCase>((ref) {
+      final repository = ref.watch(sensorRepositoryProvider);
+      return GetMagneticFieldUncalibratedStreamUseCase(repository);
+    });
+
+final getGyroscopeUncalibratedStreamUseCaseProvider =
+    Provider<GetGyroscopeUncalibratedStreamUseCase>((ref) {
+      final repository = ref.watch(sensorRepositoryProvider);
+      return GetGyroscopeUncalibratedStreamUseCase(repository);
+    });
+
+// New sensor data providers
+final getSignificantMotionDataUseCaseProvider =
+    Provider<GetSignificantMotionDataUseCase>((ref) {
+      final repository = ref.watch(sensorRepositoryProvider);
+      return GetSignificantMotionDataUseCase(repository);
+    });
+
+final getStationaryDetectDataUseCaseProvider =
+    Provider<GetStationaryDetectDataUseCase>((ref) {
+      final repository = ref.watch(sensorRepositoryProvider);
+      return GetStationaryDetectDataUseCase(repository);
+    });
+
+final getWakeGestureDataUseCaseProvider = Provider<GetWakeGestureDataUseCase>((
+  ref,
+) {
+  final repository = ref.watch(sensorRepositoryProvider);
+  return GetWakeGestureDataUseCase(repository);
+});
+
+final getPickupDetectDataUseCaseProvider = Provider<GetPickupDetectDataUseCase>(
+  (ref) {
+    final repository = ref.watch(sensorRepositoryProvider);
+    return GetPickupDetectDataUseCase(repository);
+  },
+);
+
+final getAccelerometerUncalibratedDataUseCaseProvider =
+    Provider<GetAccelerometerUncalibratedDataUseCase>((ref) {
+      final repository = ref.watch(sensorRepositoryProvider);
+      return GetAccelerometerUncalibratedDataUseCase(repository);
+    });
+
+final getMagneticFieldUncalibratedDataUseCaseProvider =
+    Provider<GetMagneticFieldUncalibratedDataUseCase>((ref) {
+      final repository = ref.watch(sensorRepositoryProvider);
+      return GetMagneticFieldUncalibratedDataUseCase(repository);
+    });
+
+final getGyroscopeUncalibratedDataUseCaseProvider =
+    Provider<GetGyroscopeUncalibratedDataUseCase>((ref) {
+      final repository = ref.watch(sensorRepositoryProvider);
+      return GetGyroscopeUncalibratedDataUseCase(repository);
+    });

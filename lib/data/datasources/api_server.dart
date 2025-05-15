@@ -28,6 +28,17 @@ class ApiServer {
   final GetGeomagneticRotationVectorDataUseCase?
   getGeomagneticRotationVectorData;
 
+  // New sensor use cases
+  final GetSignificantMotionDataUseCase? getSignificantMotionData;
+  final GetStationaryDetectDataUseCase? getStationaryDetectData;
+  final GetWakeGestureDataUseCase? getWakeGestureData;
+  final GetPickupDetectDataUseCase? getPickupDetectData;
+  final GetAccelerometerUncalibratedDataUseCase?
+  getAccelerometerUncalibratedData;
+  final GetMagneticFieldUncalibratedDataUseCase?
+  getMagneticFieldUncalibratedData;
+  final GetGyroscopeUncalibratedDataUseCase? getGyroscopeUncalibratedData;
+
   HttpServer? _server;
   String _host = '0.0.0.0';
   int _port = 8080;
@@ -49,6 +60,14 @@ class ApiServer {
     this.getLinearAccelerationData,
     this.getGameRotationVectorData,
     this.getGeomagneticRotationVectorData,
+    // New sensor parameters
+    this.getSignificantMotionData,
+    this.getStationaryDetectData,
+    this.getWakeGestureData,
+    this.getPickupDetectData,
+    this.getAccelerometerUncalibratedData,
+    this.getMagneticFieldUncalibratedData,
+    this.getGyroscopeUncalibratedData,
   });
 
   Future<void> start({String? host, int? port}) async {
@@ -204,6 +223,83 @@ class ApiServer {
             return _jsonResponse(
               false,
               'Geomagnetic rotation vector sensor not supported',
+              null,
+            );
+          }
+        } else if (path == 'significantmotion') {
+          if (getSignificantMotionData != null) {
+            final data = await getSignificantMotionData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Significant motion sensor not supported',
+              null,
+            );
+          }
+        } else if (path == 'stationarydetect') {
+          if (getStationaryDetectData != null) {
+            final data = await getStationaryDetectData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Stationary detect sensor not supported',
+              null,
+            );
+          }
+        } else if (path == 'wakegesture') {
+          if (getWakeGestureData != null) {
+            final data = await getWakeGestureData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Wake gesture sensor not supported',
+              null,
+            );
+          }
+        } else if (path == 'pickupdetect') {
+          if (getPickupDetectData != null) {
+            final data = await getPickupDetectData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Pickup detect sensor not supported',
+              null,
+            );
+          }
+        } else if (path == 'accelerometeruncalibrated') {
+          if (getAccelerometerUncalibratedData != null) {
+            final data = await getAccelerometerUncalibratedData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Accelerometer uncalibrated sensor not supported',
+              null,
+            );
+          }
+        } else if (path == 'magneticfielduncalibrated') {
+          if (getMagneticFieldUncalibratedData != null) {
+            final data = await getMagneticFieldUncalibratedData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Magnetic field uncalibrated sensor not supported',
+              null,
+            );
+          }
+        } else if (path == 'gyroscopeuncalibrated') {
+          if (getGyroscopeUncalibratedData != null) {
+            final data = await getGyroscopeUncalibratedData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(
+              false,
+              'Gyroscope uncalibrated sensor not supported',
               null,
             );
           }

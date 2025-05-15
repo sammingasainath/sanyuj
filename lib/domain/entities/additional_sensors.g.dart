@@ -169,6 +169,144 @@ Map<String, dynamic> _$GeomagneticRotationVectorDataToJson(
   'tenantId': instance.tenantId,
 };
 
+_SignificantMotionData _$SignificantMotionDataFromJson(
+  Map<String, dynamic> json,
+) => _SignificantMotionData(
+  detected: json['detected'] as bool,
+  timestamp: DateTime.parse(json['timestamp'] as String),
+  tenantId: json['tenantId'] as String?,
+);
+
+Map<String, dynamic> _$SignificantMotionDataToJson(
+  _SignificantMotionData instance,
+) => <String, dynamic>{
+  'detected': instance.detected,
+  'timestamp': instance.timestamp.toIso8601String(),
+  'tenantId': instance.tenantId,
+};
+
+_StationaryDetectData _$StationaryDetectDataFromJson(
+  Map<String, dynamic> json,
+) => _StationaryDetectData(
+  isStationary: json['isStationary'] as bool,
+  timestamp: DateTime.parse(json['timestamp'] as String),
+  tenantId: json['tenantId'] as String?,
+);
+
+Map<String, dynamic> _$StationaryDetectDataToJson(
+  _StationaryDetectData instance,
+) => <String, dynamic>{
+  'isStationary': instance.isStationary,
+  'timestamp': instance.timestamp.toIso8601String(),
+  'tenantId': instance.tenantId,
+};
+
+_WakeGestureData _$WakeGestureDataFromJson(Map<String, dynamic> json) =>
+    _WakeGestureData(
+      detected: json['detected'] as bool,
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      tenantId: json['tenantId'] as String?,
+    );
+
+Map<String, dynamic> _$WakeGestureDataToJson(_WakeGestureData instance) =>
+    <String, dynamic>{
+      'detected': instance.detected,
+      'timestamp': instance.timestamp.toIso8601String(),
+      'tenantId': instance.tenantId,
+    };
+
+_PickupDetectData _$PickupDetectDataFromJson(Map<String, dynamic> json) =>
+    _PickupDetectData(
+      detected: json['detected'] as bool,
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      tenantId: json['tenantId'] as String?,
+    );
+
+Map<String, dynamic> _$PickupDetectDataToJson(_PickupDetectData instance) =>
+    <String, dynamic>{
+      'detected': instance.detected,
+      'timestamp': instance.timestamp.toIso8601String(),
+      'tenantId': instance.tenantId,
+    };
+
+_AccelerometerUncalibratedData _$AccelerometerUncalibratedDataFromJson(
+  Map<String, dynamic> json,
+) => _AccelerometerUncalibratedData(
+  x: (json['x'] as num).toDouble(),
+  y: (json['y'] as num).toDouble(),
+  z: (json['z'] as num).toDouble(),
+  xBias: (json['xBias'] as num).toDouble(),
+  yBias: (json['yBias'] as num).toDouble(),
+  zBias: (json['zBias'] as num).toDouble(),
+  timestamp: DateTime.parse(json['timestamp'] as String),
+  tenantId: json['tenantId'] as String?,
+);
+
+Map<String, dynamic> _$AccelerometerUncalibratedDataToJson(
+  _AccelerometerUncalibratedData instance,
+) => <String, dynamic>{
+  'x': instance.x,
+  'y': instance.y,
+  'z': instance.z,
+  'xBias': instance.xBias,
+  'yBias': instance.yBias,
+  'zBias': instance.zBias,
+  'timestamp': instance.timestamp.toIso8601String(),
+  'tenantId': instance.tenantId,
+};
+
+_MagneticFieldUncalibratedData _$MagneticFieldUncalibratedDataFromJson(
+  Map<String, dynamic> json,
+) => _MagneticFieldUncalibratedData(
+  x: (json['x'] as num).toDouble(),
+  y: (json['y'] as num).toDouble(),
+  z: (json['z'] as num).toDouble(),
+  xBias: (json['xBias'] as num).toDouble(),
+  yBias: (json['yBias'] as num).toDouble(),
+  zBias: (json['zBias'] as num).toDouble(),
+  timestamp: DateTime.parse(json['timestamp'] as String),
+  tenantId: json['tenantId'] as String?,
+);
+
+Map<String, dynamic> _$MagneticFieldUncalibratedDataToJson(
+  _MagneticFieldUncalibratedData instance,
+) => <String, dynamic>{
+  'x': instance.x,
+  'y': instance.y,
+  'z': instance.z,
+  'xBias': instance.xBias,
+  'yBias': instance.yBias,
+  'zBias': instance.zBias,
+  'timestamp': instance.timestamp.toIso8601String(),
+  'tenantId': instance.tenantId,
+};
+
+_GyroscopeUncalibratedData _$GyroscopeUncalibratedDataFromJson(
+  Map<String, dynamic> json,
+) => _GyroscopeUncalibratedData(
+  x: (json['x'] as num).toDouble(),
+  y: (json['y'] as num).toDouble(),
+  z: (json['z'] as num).toDouble(),
+  xDrift: (json['xDrift'] as num).toDouble(),
+  yDrift: (json['yDrift'] as num).toDouble(),
+  zDrift: (json['zDrift'] as num).toDouble(),
+  timestamp: DateTime.parse(json['timestamp'] as String),
+  tenantId: json['tenantId'] as String?,
+);
+
+Map<String, dynamic> _$GyroscopeUncalibratedDataToJson(
+  _GyroscopeUncalibratedData instance,
+) => <String, dynamic>{
+  'x': instance.x,
+  'y': instance.y,
+  'z': instance.z,
+  'xDrift': instance.xDrift,
+  'yDrift': instance.yDrift,
+  'zDrift': instance.zDrift,
+  'timestamp': instance.timestamp.toIso8601String(),
+  'tenantId': instance.tenantId,
+};
+
 _EnhancedSensorData _$EnhancedSensorDataFromJson(
   Map<String, dynamic> json,
 ) => _EnhancedSensorData(
@@ -254,6 +392,48 @@ _EnhancedSensorData _$EnhancedSensorDataFromJson(
           : GeomagneticRotationVectorData.fromJson(
             json['geomagneticRotationVector'] as Map<String, dynamic>,
           ),
+  significantMotion:
+      json['significantMotion'] == null
+          ? null
+          : SignificantMotionData.fromJson(
+            json['significantMotion'] as Map<String, dynamic>,
+          ),
+  stationaryDetect:
+      json['stationaryDetect'] == null
+          ? null
+          : StationaryDetectData.fromJson(
+            json['stationaryDetect'] as Map<String, dynamic>,
+          ),
+  wakeGesture:
+      json['wakeGesture'] == null
+          ? null
+          : WakeGestureData.fromJson(
+            json['wakeGesture'] as Map<String, dynamic>,
+          ),
+  pickupDetect:
+      json['pickupDetect'] == null
+          ? null
+          : PickupDetectData.fromJson(
+            json['pickupDetect'] as Map<String, dynamic>,
+          ),
+  accelerometerUncalibrated:
+      json['accelerometerUncalibrated'] == null
+          ? null
+          : AccelerometerUncalibratedData.fromJson(
+            json['accelerometerUncalibrated'] as Map<String, dynamic>,
+          ),
+  magneticFieldUncalibrated:
+      json['magneticFieldUncalibrated'] == null
+          ? null
+          : MagneticFieldUncalibratedData.fromJson(
+            json['magneticFieldUncalibrated'] as Map<String, dynamic>,
+          ),
+  gyroscopeUncalibrated:
+      json['gyroscopeUncalibrated'] == null
+          ? null
+          : GyroscopeUncalibratedData.fromJson(
+            json['gyroscopeUncalibrated'] as Map<String, dynamic>,
+          ),
 );
 
 Map<String, dynamic> _$EnhancedSensorDataToJson(_EnhancedSensorData instance) =>
@@ -275,4 +455,11 @@ Map<String, dynamic> _$EnhancedSensorDataToJson(_EnhancedSensorData instance) =>
       'deviceOrientation': instance.deviceOrientation,
       'gameRotationVector': instance.gameRotationVector,
       'geomagneticRotationVector': instance.geomagneticRotationVector,
+      'significantMotion': instance.significantMotion,
+      'stationaryDetect': instance.stationaryDetect,
+      'wakeGesture': instance.wakeGesture,
+      'pickupDetect': instance.pickupDetect,
+      'accelerometerUncalibrated': instance.accelerometerUncalibrated,
+      'magneticFieldUncalibrated': instance.magneticFieldUncalibrated,
+      'gyroscopeUncalibrated': instance.gyroscopeUncalibrated,
     };

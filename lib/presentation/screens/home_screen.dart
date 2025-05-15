@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:sensor_api/data/datasources/platform_sensor_datasource.dart';
+import 'package:sensor_api/data/datasources/api_server.dart';
+import 'package:sensor_api/domain/entities/sensor_data.dart';
 import 'package:sensor_api/domain/entities/additional_sensors.dart';
 import 'package:sensor_api/presentation/providers/sensor_provider.dart';
 import 'package:sensor_api/presentation/widgets/sensor_card_widget.dart';
@@ -121,6 +123,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         ref.refresh(linearAccelerationStreamProvider);
         ref.refresh(stepCounterStreamProvider);
         ref.refresh(stepDetectorStreamProvider);
+        // Refresh new sensors
+        ref.refresh(significantMotionStreamProvider);
+        ref.refresh(stationaryDetectStreamProvider);
+        ref.refresh(wakeGestureStreamProvider);
+        ref.refresh(pickupDetectStreamProvider);
+        ref.refresh(accelerometerUncalibratedStreamProvider);
+        ref.refresh(magneticFieldUncalibratedStreamProvider);
+        ref.refresh(gyroscopeUncalibratedStreamProvider);
       },
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -132,6 +142,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             _buildEnvironmentalSensorsGroup(),
             _buildPositionSensorsGroup(),
             _buildActivitySensorsGroup(),
+            _buildNewSensorsGroup(),
           ],
         ),
       ),
@@ -283,6 +294,114 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           sensorData: linearAccelerationData,
           valueBuilder:
               (data) => SensorValueWidget(x: data.x, y: data.y, z: data.z),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNewSensorsGroup() {
+    final significantMotionData = ref.watch(significantMotionStreamProvider);
+    final stationaryDetectData = ref.watch(stationaryDetectStreamProvider);
+    final wakeGestureData = ref.watch(wakeGestureStreamProvider);
+    final pickupDetectData = ref.watch(pickupDetectStreamProvider);
+    final accelerometerUncalibratedData = ref.watch(
+      accelerometerUncalibratedStreamProvider,
+    );
+    final magneticFieldUncalibratedData = ref.watch(
+      magneticFieldUncalibratedStreamProvider,
+    );
+    final gyroscopeUncalibratedData = ref.watch(
+      gyroscopeUncalibratedStreamProvider,
+    );
+
+    return SensorGroupWidget(
+      title: 'Advanced Sensors',
+      sensorCards: [
+        // Boolean sensor types (with simple UI)
+        SensorCardWidget(
+          title: 'Significant Motion',
+          icon: Icons.motion_photos_on,
+          sensorData: significantMotionData,
+          valueBuilder:
+              (data) => SignificantMotionValueWidget(detected: data.detected),
+        ),
+        SensorCardWidget(
+          title: 'Stationary Detect',
+          icon: Icons.do_not_disturb_on_outlined,
+          sensorData: stationaryDetectData,
+          valueBuilder:
+              (data) =>
+                  StationaryDetectValueWidget(isStationary: data.isStationary),
+        ),
+        SensorCardWidget(
+          title: 'Wake Gesture',
+          icon: Icons.back_hand,
+          sensorData: wakeGestureData,
+          valueBuilder:
+              (data) => WakeGestureValueWidget(detected: data.detected),
+        ),
+        SensorCardWidget(
+          title: 'Pickup Detect',
+          icon: Icons.mobile_friendly,
+          sensorData: pickupDetectData,
+          valueBuilder:
+              (data) => PickupDetectValueWidget(detected: data.detected),
+        ),
+
+        // Uncalibrated sensors (more complex UI with potential overflow)
+        SensorCardWidget(
+          title: 'Accel. Uncalibrated',
+          icon: Icons.speed,
+          sensorData: accelerometerUncalibratedData,
+          valueBuilder:
+              (data) => Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                child: UncalibratedSensorValueWidget(
+                  x: data.x,
+                  y: data.y,
+                  z: data.z,
+                  xBiasOrDrift: data.xBias,
+                  yBiasOrDrift: data.yBias,
+                  zBiasOrDrift: data.zBias,
+                  biasOrDriftLabel: 'Bias',
+                ),
+              ),
+        ),
+        SensorCardWidget(
+          title: 'Magnetic Uncalibrated',
+          icon: Icons.compass_calibration,
+          sensorData: magneticFieldUncalibratedData,
+          valueBuilder:
+              (data) => Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                child: UncalibratedSensorValueWidget(
+                  x: data.x,
+                  y: data.y,
+                  z: data.z,
+                  xBiasOrDrift: data.xBias,
+                  yBiasOrDrift: data.yBias,
+                  zBiasOrDrift: data.zBias,
+                  biasOrDriftLabel: 'Bias',
+                ),
+              ),
+        ),
+        SensorCardWidget(
+          title: 'Gyro. Uncalibrated',
+          icon: Icons.rotate_90_degrees_ccw,
+          sensorData: gyroscopeUncalibratedData,
+          valueBuilder:
+              (data) => Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                child: UncalibratedSensorValueWidget(
+                  x: data.x,
+                  y: data.y,
+                  z: data.z,
+                  xBiasOrDrift: data.xDrift,
+                  yBiasOrDrift: data.yDrift,
+                  zBiasOrDrift: data.zDrift,
+                  biasOrDriftLabel: 'Drift',
+                ),
+              ),
         ),
       ],
     );

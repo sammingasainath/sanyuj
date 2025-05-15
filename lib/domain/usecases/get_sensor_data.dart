@@ -312,3 +312,143 @@ class GetGeomagneticRotationVectorDataUseCase {
     return repository.getGeomagneticRotationVectorData();
   }
 }
+
+class GetSignificantMotionStreamUseCase {
+  final SensorRepository _repository;
+
+  GetSignificantMotionStreamUseCase(this._repository);
+
+  Stream<SignificantMotionData> call() {
+    return _repository.getSignificantMotionStream();
+  }
+}
+
+class GetStationaryDetectStreamUseCase {
+  final SensorRepository _repository;
+
+  GetStationaryDetectStreamUseCase(this._repository);
+
+  Stream<StationaryDetectData> call() {
+    return _repository.getStationaryDetectStream();
+  }
+}
+
+class GetWakeGestureStreamUseCase {
+  final SensorRepository _repository;
+
+  GetWakeGestureStreamUseCase(this._repository);
+
+  Stream<WakeGestureData> call() {
+    return _repository.getWakeGestureStream();
+  }
+}
+
+class GetPickupDetectStreamUseCase {
+  final SensorRepository _repository;
+
+  GetPickupDetectStreamUseCase(this._repository);
+
+  Stream<PickupDetectData> call() {
+    return _repository.getPickupDetectStream();
+  }
+}
+
+class GetAccelerometerUncalibratedStreamUseCase {
+  final SensorRepository _repository;
+
+  GetAccelerometerUncalibratedStreamUseCase(this._repository);
+
+  Stream<AccelerometerUncalibratedData> call() {
+    return _repository.getAccelerometerUncalibratedStream();
+  }
+}
+
+class GetMagneticFieldUncalibratedStreamUseCase {
+  final SensorRepository _repository;
+
+  GetMagneticFieldUncalibratedStreamUseCase(this._repository);
+
+  Stream<MagneticFieldUncalibratedData> call() {
+    return _repository.getMagneticFieldUncalibratedStream();
+  }
+}
+
+class GetGyroscopeUncalibratedStreamUseCase {
+  final SensorRepository _repository;
+
+  GetGyroscopeUncalibratedStreamUseCase(this._repository);
+
+  Stream<GyroscopeUncalibratedData> call() {
+    return _repository.getGyroscopeUncalibratedStream();
+  }
+}
+
+class GetSignificantMotionDataUseCase {
+  final SensorRepository _repository;
+
+  GetSignificantMotionDataUseCase(this._repository);
+
+  Future<SignificantMotionData?> call() {
+    return _repository.getSignificantMotionData();
+  }
+}
+
+class GetStationaryDetectDataUseCase {
+  final SensorRepository _repository;
+
+  GetStationaryDetectDataUseCase(this._repository);
+
+  Future<StationaryDetectData?> call() {
+    return _repository.getStationaryDetectData();
+  }
+}
+
+class GetWakeGestureDataUseCase {
+  final SensorRepository _repository;
+
+  GetWakeGestureDataUseCase(this._repository);
+
+  Future<WakeGestureData?> call() {
+    return _repository.getWakeGestureData();
+  }
+}
+
+class GetPickupDetectDataUseCase {
+  final SensorRepository _repository;
+
+  GetPickupDetectDataUseCase(this._repository);
+
+  Future<PickupDetectData?> call() {
+    return _repository.getPickupDetectData();
+  }
+}
+
+class GetAccelerometerUncalibratedDataUseCase {
+  final SensorRepository _repository;
+
+  GetAccelerometerUncalibratedDataUseCase(this._repository);
+
+  Future<AccelerometerUncalibratedData?> call() {
+    return _repository.getAccelerometerUncalibratedData();
+  }
+}
+
+class GetMagneticFieldUncalibratedDataUseCase {
+  final SensorRepository _repository;
+
+  GetMagneticFieldUncalibratedDataUseCase(this._repository);
+
+  Future<MagneticFieldUncalibratedData?> call() {
+    return _repository.getMagneticFieldUncalibratedData();
+  }
+}
+
+class GetGyroscopeUncalibratedDataUseCase {
+  final SensorRepository _repository;
+
+  GetGyroscopeUncalibratedDataUseCase(this._repository);
+
+  Future<GyroscopeUncalibratedData?> call() {
+    return _repository.getGyroscopeUncalibratedData();
+  }
+}

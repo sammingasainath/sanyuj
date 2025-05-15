@@ -138,6 +138,114 @@ abstract class GeomagneticRotationVectorData
       _$GeomagneticRotationVectorDataFromJson(json);
 }
 
+/// Significant Motion sensor data
+@freezed
+abstract class SignificantMotionData with _$SignificantMotionData {
+  const factory SignificantMotionData({
+    required bool detected,
+    required DateTime timestamp,
+    String? tenantId,
+  }) = _SignificantMotionData;
+
+  factory SignificantMotionData.fromJson(Map<String, dynamic> json) =>
+      _$SignificantMotionDataFromJson(json);
+}
+
+/// Stationary Detector sensor data
+@freezed
+abstract class StationaryDetectData with _$StationaryDetectData {
+  const factory StationaryDetectData({
+    required bool isStationary,
+    required DateTime timestamp,
+    String? tenantId,
+  }) = _StationaryDetectData;
+
+  factory StationaryDetectData.fromJson(Map<String, dynamic> json) =>
+      _$StationaryDetectDataFromJson(json);
+}
+
+/// Wake Gesture sensor data
+@freezed
+abstract class WakeGestureData with _$WakeGestureData {
+  const factory WakeGestureData({
+    required bool detected,
+    required DateTime timestamp,
+    String? tenantId,
+  }) = _WakeGestureData;
+
+  factory WakeGestureData.fromJson(Map<String, dynamic> json) =>
+      _$WakeGestureDataFromJson(json);
+}
+
+/// Pickup Detect sensor data
+@freezed
+abstract class PickupDetectData with _$PickupDetectData {
+  const factory PickupDetectData({
+    required bool detected,
+    required DateTime timestamp,
+    String? tenantId,
+  }) = _PickupDetectData;
+
+  factory PickupDetectData.fromJson(Map<String, dynamic> json) =>
+      _$PickupDetectDataFromJson(json);
+}
+
+/// Accelerometer Uncalibrated sensor data
+@freezed
+abstract class AccelerometerUncalibratedData
+    with _$AccelerometerUncalibratedData {
+  const factory AccelerometerUncalibratedData({
+    required double x,
+    required double y,
+    required double z,
+    required double xBias,
+    required double yBias,
+    required double zBias,
+    required DateTime timestamp,
+    String? tenantId,
+  }) = _AccelerometerUncalibratedData;
+
+  factory AccelerometerUncalibratedData.fromJson(Map<String, dynamic> json) =>
+      _$AccelerometerUncalibratedDataFromJson(json);
+}
+
+/// Magnetic Field Uncalibrated sensor data
+@freezed
+abstract class MagneticFieldUncalibratedData
+    with _$MagneticFieldUncalibratedData {
+  const factory MagneticFieldUncalibratedData({
+    required double x,
+    required double y,
+    required double z,
+    required double xBias,
+    required double yBias,
+    required double zBias,
+    required DateTime timestamp,
+    String? tenantId,
+  }) = _MagneticFieldUncalibratedData;
+
+  factory MagneticFieldUncalibratedData.fromJson(Map<String, dynamic> json) =>
+      _$MagneticFieldUncalibratedDataFromJson(json);
+}
+
+/// Gyroscope Uncalibrated sensor data
+@freezed
+abstract class GyroscopeUncalibratedData with _$GyroscopeUncalibratedData {
+  const factory GyroscopeUncalibratedData({
+    required double x,
+    required double y,
+    required double z,
+    required double xDrift,
+    required double yDrift,
+    required double zDrift,
+    required DateTime timestamp,
+    String? tenantId,
+  }) = _GyroscopeUncalibratedData;
+
+  factory GyroscopeUncalibratedData.fromJson(Map<String, dynamic> json) =>
+      _$GyroscopeUncalibratedDataFromJson(json);
+}
+
 /// Enhanced combined sensor data with additional sensors
 @freezed
 abstract class EnhancedSensorData with _$EnhancedSensorData {
@@ -164,6 +272,14 @@ abstract class EnhancedSensorData with _$EnhancedSensorData {
     DeviceOrientationData? deviceOrientation,
     GameRotationVectorData? gameRotationVector,
     GeomagneticRotationVectorData? geomagneticRotationVector,
+    // New sensors
+    SignificantMotionData? significantMotion,
+    StationaryDetectData? stationaryDetect,
+    WakeGestureData? wakeGesture,
+    PickupDetectData? pickupDetect,
+    AccelerometerUncalibratedData? accelerometerUncalibrated,
+    MagneticFieldUncalibratedData? magneticFieldUncalibrated,
+    GyroscopeUncalibratedData? gyroscopeUncalibrated,
   }) = _EnhancedSensorData;
 
   factory EnhancedSensorData.fromJson(Map<String, dynamic> json) =>
@@ -174,12 +290,33 @@ abstract class EnhancedSensorData with _$EnhancedSensorData {
     CombinedSensorData combinedData,
   ) {
     return EnhancedSensorData(
+      // Basic sensors
       accelerometer: combinedData.accelerometer,
       gyroscope: combinedData.gyroscope,
       magnetometer: combinedData.magnetometer,
       proximity: combinedData.proximity,
       light: combinedData.light,
       pressure: combinedData.pressure,
+
+      // Additional sensors
+      stepCounter: combinedData.stepCounter,
+      stepDetector: combinedData.stepDetector,
+      rotationVector: combinedData.rotationVector,
+      orientation: combinedData.orientation,
+      gravity: combinedData.gravity,
+      linearAcceleration: combinedData.linearAcceleration,
+      gameRotationVector: combinedData.gameRotationVector,
+      geomagneticRotationVector: combinedData.geomagneticRotationVector,
+
+      // New sensors
+      significantMotion: combinedData.significantMotion,
+      stationaryDetect: combinedData.stationaryDetect,
+      wakeGesture: combinedData.wakeGesture,
+      pickupDetect: combinedData.pickupDetect,
+      accelerometerUncalibrated: combinedData.accelerometerUncalibrated,
+      magneticFieldUncalibrated: combinedData.magneticFieldUncalibrated,
+      gyroscopeUncalibrated: combinedData.gyroscopeUncalibrated,
+
       timestamp: combinedData.timestamp,
       tenantId: combinedData.tenantId,
     );
@@ -207,6 +344,15 @@ extension EnhancedSensorDataConverter on EnhancedSensorData {
       linearAcceleration: linearAcceleration,
       gameRotationVector: gameRotationVector,
       geomagneticRotationVector: geomagneticRotationVector,
+
+      // New sensors
+      significantMotion: significantMotion,
+      stationaryDetect: stationaryDetect,
+      wakeGesture: wakeGesture,
+      pickupDetect: pickupDetect,
+      accelerometerUncalibrated: accelerometerUncalibrated,
+      magneticFieldUncalibrated: magneticFieldUncalibrated,
+      gyroscopeUncalibrated: gyroscopeUncalibrated,
 
       timestamp: timestamp,
       tenantId: tenantId,

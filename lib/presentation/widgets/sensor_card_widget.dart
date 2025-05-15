@@ -27,16 +27,20 @@ class SensorCardWidget extends ConsumerWidget {
           children: [
             Row(
               children: [
-                Icon(icon),
+                Icon(icon, size: 20),
                 const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(width: 4),
                 sensorData.when(
                   data:
                       (_) => const Icon(

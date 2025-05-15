@@ -357,3 +357,220 @@ class DeviceOrientationValueWidget extends StatelessWidget {
     }
   }
 }
+
+/// Widget for displaying significant motion sensor data
+class SignificantMotionValueWidget extends StatelessWidget {
+  final bool detected;
+
+  const SignificantMotionValueWidget({super.key, required this.detected});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text('Motion Detected: '),
+            Container(
+              width: 12,
+              height: 12,
+              decoration: BoxDecoration(
+                color: detected ? Colors.green : Colors.grey,
+                shape: BoxShape.circle,
+              ),
+            ),
+            SizedBox(width: 4),
+            Text(detected ? 'Yes' : 'No'),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Widget for displaying stationary detection sensor data
+class StationaryDetectValueWidget extends StatelessWidget {
+  final bool isStationary;
+
+  const StationaryDetectValueWidget({super.key, required this.isStationary});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text('Stationary: '),
+            Container(
+              width: 12,
+              height: 12,
+              decoration: BoxDecoration(
+                color: isStationary ? Colors.green : Colors.orange,
+                shape: BoxShape.circle,
+              ),
+            ),
+            SizedBox(width: 4),
+            Text(isStationary ? 'Yes' : 'No'),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Widget for displaying wake gesture sensor data
+class WakeGestureValueWidget extends StatelessWidget {
+  final bool detected;
+
+  const WakeGestureValueWidget({super.key, required this.detected});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text('Wake Gesture: '),
+            Container(
+              width: 12,
+              height: 12,
+              decoration: BoxDecoration(
+                color: detected ? Colors.green : Colors.grey,
+                shape: BoxShape.circle,
+              ),
+            ),
+            SizedBox(width: 4),
+            Text(detected ? 'Detected' : 'None'),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Widget for displaying pickup detection sensor data
+class PickupDetectValueWidget extends StatelessWidget {
+  final bool detected;
+
+  const PickupDetectValueWidget({super.key, required this.detected});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text('Pickup: '),
+            Container(
+              width: 12,
+              height: 12,
+              decoration: BoxDecoration(
+                color: detected ? Colors.green : Colors.grey,
+                shape: BoxShape.circle,
+              ),
+            ),
+            SizedBox(width: 4),
+            Text(detected ? 'Detected' : 'None'),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Widget for displaying uncalibrated sensor data with bias/drift values
+class UncalibratedSensorValueWidget extends StatelessWidget {
+  final double x;
+  final double y;
+  final double z;
+  final double xBiasOrDrift;
+  final double yBiasOrDrift;
+  final double zBiasOrDrift;
+  final String biasOrDriftLabel;
+
+  const UncalibratedSensorValueWidget({
+    super.key,
+    required this.x,
+    required this.y,
+    required this.z,
+    required this.xBiasOrDrift,
+    required this.yBiasOrDrift,
+    required this.zBiasOrDrift,
+    this.biasOrDriftLabel = 'Bias',
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Raw values
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      'X: ${x.toStringAsFixed(2)}',
+                      style: TextStyle(fontSize: 12),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      'Y: ${y.toStringAsFixed(2)}',
+                      style: TextStyle(fontSize: 12),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                'Z: ${z.toStringAsFixed(2)}',
+                style: TextStyle(fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+              ),
+
+              Divider(height: 6, thickness: 0.5),
+
+              // Bias/Drift values
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      '$biasOrDriftLabel X: ${xBiasOrDrift.toStringAsFixed(2)}',
+                      style: TextStyle(fontSize: 12),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      '$biasOrDriftLabel Y: ${yBiasOrDrift.toStringAsFixed(2)}',
+                      style: TextStyle(fontSize: 12),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                '$biasOrDriftLabel Z: ${zBiasOrDrift.toStringAsFixed(2)}',
+                style: TextStyle(fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}

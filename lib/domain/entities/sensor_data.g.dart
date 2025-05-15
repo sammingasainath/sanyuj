@@ -201,6 +201,48 @@ _CombinedSensorData _$CombinedSensorDataFromJson(
           : GeomagneticRotationVectorData.fromJson(
             json['geomagneticRotationVector'] as Map<String, dynamic>,
           ),
+  significantMotion:
+      json['significantMotion'] == null
+          ? null
+          : SignificantMotionData.fromJson(
+            json['significantMotion'] as Map<String, dynamic>,
+          ),
+  stationaryDetect:
+      json['stationaryDetect'] == null
+          ? null
+          : StationaryDetectData.fromJson(
+            json['stationaryDetect'] as Map<String, dynamic>,
+          ),
+  wakeGesture:
+      json['wakeGesture'] == null
+          ? null
+          : WakeGestureData.fromJson(
+            json['wakeGesture'] as Map<String, dynamic>,
+          ),
+  pickupDetect:
+      json['pickupDetect'] == null
+          ? null
+          : PickupDetectData.fromJson(
+            json['pickupDetect'] as Map<String, dynamic>,
+          ),
+  accelerometerUncalibrated:
+      json['accelerometerUncalibrated'] == null
+          ? null
+          : AccelerometerUncalibratedData.fromJson(
+            json['accelerometerUncalibrated'] as Map<String, dynamic>,
+          ),
+  magneticFieldUncalibrated:
+      json['magneticFieldUncalibrated'] == null
+          ? null
+          : MagneticFieldUncalibratedData.fromJson(
+            json['magneticFieldUncalibrated'] as Map<String, dynamic>,
+          ),
+  gyroscopeUncalibrated:
+      json['gyroscopeUncalibrated'] == null
+          ? null
+          : GyroscopeUncalibratedData.fromJson(
+            json['gyroscopeUncalibrated'] as Map<String, dynamic>,
+          ),
   timestamp: DateTime.parse(json['timestamp'] as String),
   tenantId: json['tenantId'] as String?,
 );
@@ -221,6 +263,13 @@ Map<String, dynamic> _$CombinedSensorDataToJson(_CombinedSensorData instance) =>
       'linearAcceleration': instance.linearAcceleration,
       'gameRotationVector': instance.gameRotationVector,
       'geomagneticRotationVector': instance.geomagneticRotationVector,
+      'significantMotion': instance.significantMotion,
+      'stationaryDetect': instance.stationaryDetect,
+      'wakeGesture': instance.wakeGesture,
+      'pickupDetect': instance.pickupDetect,
+      'accelerometerUncalibrated': instance.accelerometerUncalibrated,
+      'magneticFieldUncalibrated': instance.magneticFieldUncalibrated,
+      'gyroscopeUncalibrated': instance.gyroscopeUncalibrated,
       'timestamp': instance.timestamp.toIso8601String(),
       'tenantId': instance.tenantId,
     };

@@ -44,6 +44,27 @@ abstract class SensorRepository {
   /// Stream of geomagnetic rotation vector data
   Stream<GeomagneticRotationVectorData> getGeomagneticRotationVectorStream();
 
+  /// Stream of significant motion data
+  Stream<SignificantMotionData> getSignificantMotionStream();
+
+  /// Stream of stationary detect data
+  Stream<StationaryDetectData> getStationaryDetectStream();
+
+  /// Stream of wake gesture data
+  Stream<WakeGestureData> getWakeGestureStream();
+
+  /// Stream of pickup detect data
+  Stream<PickupDetectData> getPickupDetectStream();
+
+  /// Stream of accelerometer uncalibrated data
+  Stream<AccelerometerUncalibratedData> getAccelerometerUncalibratedStream();
+
+  /// Stream of magnetic field uncalibrated data
+  Stream<MagneticFieldUncalibratedData> getMagneticFieldUncalibratedStream();
+
+  /// Stream of gyroscope uncalibrated data
+  Stream<GyroscopeUncalibratedData> getGyroscopeUncalibratedStream();
+
   /// Get the latest accelerometer reading
   Future<AccelerometerData> getAccelerometerData();
 
@@ -86,9 +107,30 @@ abstract class SensorRepository {
   /// Get the latest geomagnetic rotation vector reading
   Future<GeomagneticRotationVectorData?> getGeomagneticRotationVectorData();
 
-  /// Get combined sensor data
+  /// Get the latest significant motion data
+  Future<SignificantMotionData?> getSignificantMotionData();
+
+  /// Get the latest stationary detect data
+  Future<StationaryDetectData?> getStationaryDetectData();
+
+  /// Get the latest wake gesture data
+  Future<WakeGestureData?> getWakeGestureData();
+
+  /// Get the latest pickup detect data
+  Future<PickupDetectData?> getPickupDetectData();
+
+  /// Get the latest accelerometer uncalibrated data
+  Future<AccelerometerUncalibratedData?> getAccelerometerUncalibratedData();
+
+  /// Get the latest magnetic field uncalibrated data
+  Future<MagneticFieldUncalibratedData?> getMagneticFieldUncalibratedData();
+
+  /// Get the latest gyroscope uncalibrated data
+  Future<GyroscopeUncalibratedData?> getGyroscopeUncalibratedData();
+
+  /// Get combined data from all available sensors
   Future<CombinedSensorData> getCombinedSensorData();
 
-  /// Get all available sensors
+  /// Get a list of all available sensors on the device
   Future<List<String>> getAvailableSensors();
 }

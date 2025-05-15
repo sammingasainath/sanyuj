@@ -118,6 +118,15 @@ abstract class CombinedSensorData with _$CombinedSensorData {
     GameRotationVectorData? gameRotationVector,
     GeomagneticRotationVectorData? geomagneticRotationVector,
 
+    // New sensors
+    SignificantMotionData? significantMotion,
+    StationaryDetectData? stationaryDetect,
+    WakeGestureData? wakeGesture,
+    PickupDetectData? pickupDetect,
+    AccelerometerUncalibratedData? accelerometerUncalibrated,
+    MagneticFieldUncalibratedData? magneticFieldUncalibrated,
+    GyroscopeUncalibratedData? gyroscopeUncalibrated,
+
     required DateTime timestamp,
     String? tenantId,
   }) = _CombinedSensorData;
