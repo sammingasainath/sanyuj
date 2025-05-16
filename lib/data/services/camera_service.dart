@@ -13,7 +13,7 @@ class CameraService {
   CameraController? _controller;
   List<CameraDescription>? _cameras;
   bool _initialized = false;
-  bool _isDisposed = false;
+  bool _isDisposed = true;
   CameraPosition _currentPosition = CameraPosition.back;
 
   /// Initialize the camera service with a specific camera position
@@ -26,6 +26,9 @@ class CameraService {
         _currentPosition == position) {
       return true;
     }
+
+    // Make sure any previous instances are disposed before initializing new ones
+    await dispose();
 
     _isDisposed = false;
     _currentPosition = position;
@@ -53,6 +56,7 @@ class CameraService {
       return true;
     } catch (e) {
       _logger.severe('Error initializing camera: $e');
+      await dispose();
       return false;
     }
   }
@@ -103,7 +107,7 @@ class CameraService {
 
   /// Switch between front and back cameras
   Future<bool> switchCamera() async {
-    if (_cameras == null || _cameras!.length < 2 || _isDisposed) {
+    if (_cameras == null || _cameras!.length < 2) {
       return false;
     }
 
@@ -131,15 +135,13 @@ class CameraService {
     }
   }
 
-  /// Take a photo with the current camera
+  /// Take a photo with the current camera and immediately release resources
   Future<CameraData?> takePhoto() async {
-    if (_isDisposed) {
-      _logger.warning('Cannot take photo: controller is disposed');
-      return null;
-    }
-
-    if (_controller == null || !(_controller!.value.isInitialized)) {
-      final initialized = await initialize();
+    // Initialize camera if needed
+    if (_controller == null ||
+        !(_controller!.value.isInitialized) ||
+        _isDisposed) {
+      final initialized = await initialize(position: _currentPosition);
       if (!initialized) return null;
     }
 
@@ -162,14 +164,21 @@ class CameraService {
       // Read the image bytes for base64 encoding
       final imageBytes = await File(savedPath).readAsBytes();
 
-      return CameraData.withBase64(
+      // Create the camera data object
+      final cameraData = CameraData.withBase64(
         imagePath: savedPath,
         imageBytes: imageBytes,
         timestamp: timestamp,
         cameraPosition: cameraPosition,
       );
+
+      // Dispose of the camera resources after taking the photo
+      await dispose();
+
+      return cameraData;
     } catch (e) {
       _logger.severe('Error taking photo: $e');
+      await dispose();
       return null;
     }
   }
@@ -177,16 +186,18 @@ class CameraService {
   /// Take a photo with the front camera
   Future<CameraData?> takeFrontCameraPhoto() async {
     await initialize(position: CameraPosition.front);
-    return takePhoto();
+    final result = await takePhoto();
+    return result;
   }
 
   /// Take a photo with the back camera
   Future<CameraData?> takeBackCameraPhoto() async {
     await initialize(position: CameraPosition.back);
-    return takePhoto();
+    final result = await takePhoto();
+    return result;
   }
 
-  /// Get the camera preview widget
+  /// Get the camera controller for previews
   CameraController? get controller {
     if (_isDisposed) return null;
     return _controller;
@@ -204,12 +215,14 @@ class CameraService {
   /// Dispose the camera controller
   Future<void> dispose() async {
     _isDisposed = true;
+    _initialized = false;
     try {
-      await _controller?.dispose();
+      if (_controller != null) {
+        await _controller?.dispose();
+        _controller = null;
+      }
     } catch (e) {
       _logger.warning('Error disposing camera controller: $e');
     }
-    _controller = null;
-    _initialized = false;
   }
 }

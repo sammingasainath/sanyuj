@@ -15,15 +15,14 @@ class CameraCardWidget extends ConsumerStatefulWidget {
 class _CameraCardWidgetState extends ConsumerState<CameraCardWidget>
     with WidgetsBindingObserver {
   String? _lastImagePath;
-  bool _isInitializing = false;
-  bool _isCameraDisposed = false;
-  CameraController? _cachedController;
+  bool _isCapturing = false;
+  bool _isSwitchingCamera = false;
+  bool _previewActive = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _initializeCamera();
   }
 
   @override
@@ -35,58 +34,140 @@ class _CameraCardWidgetState extends ConsumerState<CameraCardWidget>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // Handle app lifecycle changes to properly manage camera resources
+    // When app is inactive or paused, make sure camera is disposed
     if (state == AppLifecycleState.inactive ||
         state == AppLifecycleState.paused) {
       _disposeCamera();
-    } else if (state == AppLifecycleState.resumed) {
-      if (_isCameraDisposed) {
-        _initializeCamera();
-      }
     }
   }
 
   Future<void> _disposeCamera() async {
     final cameraUseCase = ref.read(getCameraDataUseCaseProvider);
     await cameraUseCase.dispose();
-    _cachedController = null;
     ref.read(isCameraInitializedProvider.notifier).state = false;
-    _isCameraDisposed = true;
-    if (mounted) setState(() {});
-  }
-
-  Future<void> _initializeCamera() async {
-    if (_isInitializing) return;
-
-    setState(() {
-      _isInitializing = true;
-    });
-
-    final cameraUseCase = ref.read(getCameraDataUseCaseProvider);
-    final result = await cameraUseCase.initialize();
-
     if (mounted) {
-      if (result) {
-        ref.read(isCameraInitializedProvider.notifier).state = true;
-        _isCameraDisposed = false;
-        _cachedController = cameraUseCase.controller;
-      }
-
       setState(() {
-        _isInitializing = false;
+        _previewActive = false;
       });
     }
+  }
+
+  Future<void> _activatePreview() async {
+    if (_previewActive) return;
+
+    setState(() {
+      _isCapturing = true;
+    });
+
+    try {
+      final cameraUseCase = ref.read(getCameraDataUseCaseProvider);
+      final result = await cameraUseCase.initialize();
+
+      if (mounted) {
+        setState(() {
+          _isCapturing = false;
+          if (result) {
+            ref.read(isCameraInitializedProvider.notifier).state = true;
+            _previewActive = true;
+          }
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isCapturing = false;
+        });
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error activating camera: $e')));
+      }
+    }
+  }
+
+  Future<void> _switchCamera() async {
+    if (_isCapturing || _isSwitchingCamera) return;
+
+    setState(() {
+      _isSwitchingCamera = true;
+    });
+
+    try {
+      await _activatePreview();
+      final cameraUseCase = ref.read(getCameraDataUseCaseProvider);
+      final success = await cameraUseCase.switchCamera();
+
+      if (mounted) {
+        setState(() {
+          _isSwitchingCamera = false;
+        });
+
+        if (!success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to switch camera. Try again.'),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isSwitchingCamera = false;
+        });
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error switching camera: $e')));
+      }
+    }
+  }
+
+  Future<void> _capturePhoto() async {
+    if (_isCapturing) return;
+
+    setState(() {
+      _isCapturing = true;
+    });
+
+    try {
+      // On-demand activation
+      await _activatePreview();
+
+      final cameraUseCase = ref.read(getCameraDataUseCaseProvider);
+      final result = await cameraUseCase.call();
+
+      if (mounted) {
+        setState(() {
+          if (result != null) {
+            _lastImagePath = result.imagePath;
+          }
+          _isCapturing = false;
+          _previewActive = false;
+        });
+
+        // Camera resources are automatically released after taking photo
+        ref.read(isCameraInitializedProvider.notifier).state = false;
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isCapturing = false;
+        });
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error taking photo: $e')));
+      }
+    }
+  }
+
+  void _resetPreview() {
+    setState(() {
+      _lastImagePath = null;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final isInitialized = ref.watch(isCameraInitializedProvider);
-
-    // Only update cached controller if it's null and the camera is initialized
-    if (_cachedController == null && !_isCameraDisposed && isInitialized) {
-      final provider = ref.read(getCameraDataUseCaseProvider);
-      _cachedController = provider.controller;
-    }
 
     return Card(
       child: Padding(
@@ -108,34 +189,19 @@ class _CameraCardWidgetState extends ConsumerState<CameraCardWidget>
                 IconButton(
                   icon: const Icon(Icons.flip_camera_android, size: 20),
                   onPressed:
-                      isInitialized && !_isInitializing ? _switchCamera : null,
+                      (_isCapturing || _isSwitchingCamera)
+                          ? null
+                          : _switchCamera,
                   tooltip: 'Switch Camera',
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            if (_isInitializing)
+            if (_isCapturing || _isSwitchingCamera)
               const Center(
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 80.0),
                   child: CircularProgressIndicator(),
-                ),
-              )
-            else if (!isInitialized || _isCameraDisposed)
-              Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Camera not initialized',
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: _initializeCamera,
-                      child: const Text('Initialize Camera'),
-                    ),
-                  ],
                 ),
               )
             else
@@ -146,7 +212,7 @@ class _CameraCardWidgetState extends ConsumerState<CameraCardWidget>
                     child: SizedBox(
                       height: 200,
                       width: double.infinity,
-                      child: _buildCameraPreview(),
+                      child: _buildCameraView(isInitialized),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -154,12 +220,7 @@ class _CameraCardWidgetState extends ConsumerState<CameraCardWidget>
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ElevatedButton.icon(
-                        onPressed:
-                            isInitialized &&
-                                    !_isInitializing &&
-                                    !_isCameraDisposed
-                                ? _capturePhoto
-                                : null,
+                        onPressed: _isCapturing ? null : _capturePhoto,
                         icon: const Icon(Icons.camera),
                         label: const Text(
                           'Take Photo',
@@ -207,99 +268,46 @@ class _CameraCardWidgetState extends ConsumerState<CameraCardWidget>
     );
   }
 
-  Widget _buildCameraPreview() {
+  Widget _buildCameraView(bool isInitialized) {
+    // If we have an image, show that
     if (_lastImagePath != null) {
       return Image.file(File(_lastImagePath!), fit: BoxFit.cover);
     }
 
-    if (_cachedController == null ||
-        _isCameraDisposed ||
-        !_cachedController!.value.isInitialized) {
-      return const Center(child: Text('Camera unavailable'));
-    }
-
-    try {
-      return CameraPreview(_cachedController!);
-    } catch (e) {
-      // If any error occurs, display a fallback
-      return const Center(child: Text('Camera preview error'));
-    }
-  }
-
-  Future<void> _capturePhoto() async {
-    try {
-      if (_isInitializing || _isCameraDisposed) return;
-
-      setState(() {
-        _isInitializing = true;
-      });
-
-      final cameraUseCase = ref.read(getCameraDataUseCaseProvider);
-      final result = await cameraUseCase.call();
-
-      if (mounted) {
-        setState(() {
-          if (result != null) {
-            _lastImagePath = result.imagePath;
-          }
-          _isInitializing = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isInitializing = false;
-        });
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error taking photo: $e')));
-      }
-    }
-  }
-
-  Future<void> _switchCamera() async {
-    try {
-      if (_isInitializing || _isCameraDisposed) return;
-
-      setState(() {
-        _isInitializing = true;
-        _cachedController = null;
-      });
-
-      final cameraUseCase = ref.read(getCameraDataUseCaseProvider);
-      final success = await cameraUseCase.switchCamera();
-
-      if (mounted) {
-        setState(() {
-          _isInitializing = false;
-          if (success) {
-            _cachedController = cameraUseCase.controller;
-          }
-        });
-
-        if (!success) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Failed to switch camera. Try again.'),
+    // If we're not actively in preview mode, show a button to activate camera
+    if (!_previewActive) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Camera preview inactive',
+              style: TextStyle(color: Colors.grey[700]),
             ),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isInitializing = false;
-        });
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error switching camera: $e')));
-      }
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: _activatePreview,
+              child: const Text('Activate Preview'),
+            ),
+          ],
+        ),
+      );
     }
-  }
 
-  void _resetPreview() {
-    setState(() {
-      _lastImagePath = null;
-    });
+    // If we're in preview mode but the camera isn't properly initialized
+    if (!isInitialized) {
+      return const Center(child: Text('Initializing camera...'));
+    }
+
+    // Show the camera preview
+    try {
+      final controller = ref.read(getCameraDataUseCaseProvider).controller;
+      if (controller == null || !controller.value.isInitialized) {
+        return const Center(child: Text('Camera controller unavailable'));
+      }
+      return CameraPreview(controller);
+    } catch (e) {
+      return Center(child: Text('Camera error: $e'));
+    }
   }
 }

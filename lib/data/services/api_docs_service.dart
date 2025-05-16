@@ -537,8 +537,39 @@ class ApiDocsService {
       fetch(protocol + '//' + host + endpoint)
         .then(response => response.json())
         .then(data => {
-          // Format and display the JSON response
-          preElement.textContent = JSON.stringify(data, null, 2);
+          // Check if this is a camera response with a base64Image
+          const isCameraResponse = endpoint.includes('camera') && 
+                                  data.success && 
+                                  data.data && 
+                                  data.data.base64Image;
+          
+          if (isCameraResponse) {
+            // Create an image element from the base64 data
+            const imageContainer = document.createElement('div');
+            imageContainer.style.marginBottom = '10px';
+            
+            const img = document.createElement('img');
+            img.src = 'data:' + data.data.contentType + ';base64,' + data.data.base64Image;
+            img.style.maxWidth = '100%';
+            img.style.borderRadius = '4px';
+            img.style.marginBottom = '10px';
+            
+            const caption = document.createElement('p');
+            caption.textContent = 'Camera: ' + (data.data.cameraPosition || 'Unknown') + 
+                                 ' | Timestamp: ' + new Date(data.data.timestamp).toLocaleString();
+            caption.style.fontSize = '14px';
+            caption.style.color = '#666';
+            
+            imageContainer.appendChild(img);
+            imageContainer.appendChild(caption);
+            
+            // Display both the image and the JSON response
+            preElement.textContent = JSON.stringify(data, null, 2);
+            responseElement.insertBefore(imageContainer, preElement);
+          } else {
+            // Format and display the JSON response for non-camera endpoints
+            preElement.textContent = JSON.stringify(data, null, 2);
+          }
         })
         .catch(error => {
           preElement.textContent = 'Error: ' + error.message;
@@ -548,6 +579,12 @@ class ApiDocsService {
     function closeResponse(responseId) {
       const responseElement = document.getElementById(responseId);
       responseElement.classList.remove('response-visible');
+      
+      // Clean up any added image elements when closing
+      const imageContainer = responseElement.querySelector('div');
+      if (imageContainer) {
+        responseElement.removeChild(imageContainer);
+      }
     }
   </script>
 </body>
