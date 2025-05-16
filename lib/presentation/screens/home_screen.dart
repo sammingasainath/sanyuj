@@ -8,11 +8,14 @@ import 'package:sensor_api/data/datasources/api_server.dart';
 import 'package:sensor_api/domain/entities/sensor_data.dart';
 import 'package:sensor_api/domain/entities/additional_sensors.dart';
 import 'package:sensor_api/presentation/providers/sensor_provider.dart';
+import 'package:sensor_api/presentation/providers/advanced_sensor_provider.dart';
 import 'package:sensor_api/presentation/widgets/sensor_card_widget.dart';
 import 'package:sensor_api/presentation/widgets/sensor_group_widget.dart';
 import 'package:sensor_api/presentation/widgets/server_config_widget.dart';
 import 'package:sensor_api/presentation/widgets/endpoints_list_widget.dart';
 import 'package:sensor_api/presentation/widgets/sensor_value_widget.dart';
+import 'package:sensor_api/presentation/widgets/gps_card_widget.dart';
+import 'package:sensor_api/presentation/widgets/camera_card_widget.dart';
 
 // Providers to check if sensors are simulated or real
 final isProximitySimulatedProvider = Provider<bool>((ref) {
@@ -111,26 +114,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget _buildSensorsTab() {
     return RefreshIndicator(
       onRefresh: () async {
-        ref.refresh(accelerometerStreamProvider);
-        ref.refresh(gyroscopeStreamProvider);
-        ref.refresh(magnetometerStreamProvider);
-        ref.refresh(proximityStreamProvider);
-        ref.refresh(lightStreamProvider);
-        ref.refresh(pressureStreamProvider);
-        ref.refresh(rotationVectorStreamProvider);
-        ref.refresh(orientationStreamProvider);
-        ref.refresh(gravityStreamProvider);
-        ref.refresh(linearAccelerationStreamProvider);
-        ref.refresh(stepCounterStreamProvider);
-        ref.refresh(stepDetectorStreamProvider);
-        // Refresh new sensors
-        ref.refresh(significantMotionStreamProvider);
-        ref.refresh(stationaryDetectStreamProvider);
-        ref.refresh(wakeGestureStreamProvider);
-        ref.refresh(pickupDetectStreamProvider);
-        ref.refresh(accelerometerUncalibratedStreamProvider);
-        ref.refresh(magneticFieldUncalibratedStreamProvider);
-        ref.refresh(gyroscopeUncalibratedStreamProvider);
+        try {
+          ref.refresh(accelerometerStreamProvider);
+          ref.refresh(gyroscopeStreamProvider);
+          ref.refresh(magnetometerStreamProvider);
+          ref.refresh(proximityStreamProvider);
+          ref.refresh(lightStreamProvider);
+          ref.refresh(pressureStreamProvider);
+          ref.refresh(rotationVectorStreamProvider);
+          ref.refresh(orientationStreamProvider);
+          ref.refresh(gravityStreamProvider);
+          ref.refresh(linearAccelerationStreamProvider);
+          ref.refresh(stepCounterStreamProvider);
+          ref.refresh(stepDetectorStreamProvider);
+          // Refresh new sensors
+          ref.refresh(significantMotionStreamProvider);
+          ref.refresh(stationaryDetectStreamProvider);
+          ref.refresh(wakeGestureStreamProvider);
+          ref.refresh(pickupDetectStreamProvider);
+          ref.refresh(accelerometerUncalibratedStreamProvider);
+          ref.refresh(magneticFieldUncalibratedStreamProvider);
+          ref.refresh(gyroscopeUncalibratedStreamProvider);
+          // Refresh advanced sensors
+          ref.refresh(gpsStreamProvider);
+        } catch (e) {
+          debugPrint('Error refreshing sensors: $e');
+        }
       },
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -138,6 +147,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            _buildAdvancedSensorsGroup(),
             _buildMotionSensorsGroup(),
             _buildEnvironmentalSensorsGroup(),
             _buildPositionSensorsGroup(),
@@ -146,6 +156,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildAdvancedSensorsGroup() {
+    return SensorGroupWidget(
+      title: 'Advanced Sensors',
+      sensorCards: [
+        const GpsCardWidget(),
+        const SizedBox(height: 10),
+        const CameraCardWidget(),
+        const SizedBox(height: 16),
+      ],
     );
   }
 

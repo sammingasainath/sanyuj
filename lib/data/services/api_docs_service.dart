@@ -436,11 +436,63 @@ class ApiDocsService {
     </div>
   </div>
 
-  <h2>Device Control</h2>
+  <h2>Advanced Sensors</h2>
   <div class="section">
     <div class="endpoint">
+      <div><span class="method">GET</span> <span class="path">/gps</span></div>
+      <div class="description">Get GPS location data (latitude, longitude, accuracy, etc.)</div>
+      <button class="try-btn" onclick="fetchEndpoint('/gps', 'gps-response')">Try it</button>
+      <div id="gps-response" class="response">
+        <div class="response-header">
+          <span>Response:</span>
+          <button class="close-btn" onclick="closeResponse('gps-response')">Close</button>
+        </div>
+        <pre></pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div><span class="method">GET</span> <span class="path">/camera</span></div>
+      <div class="description">Take a photo using the current camera and return image data</div>
+      <button class="try-btn" onclick="fetchEndpoint('/camera', 'camera-response')">Try it</button>
+      <div id="camera-response" class="response">
+        <div class="response-header">
+          <span>Response:</span>
+          <button class="close-btn" onclick="closeResponse('camera-response')">Close</button>
+        </div>
+        <pre></pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div><span class="method">GET</span> <span class="path">/camera/front</span></div>
+      <div class="description">Take a photo using the front camera and return image data</div>
+      <button class="try-btn" onclick="fetchEndpoint('/camera/front', 'camera-front-response')">Try it</button>
+      <div id="camera-front-response" class="response">
+        <div class="response-header">
+          <span>Response:</span>
+          <button class="close-btn" onclick="closeResponse('camera-front-response')">Close</button>
+        </div>
+        <pre></pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div><span class="method">GET</span> <span class="path">/camera/back</span></div>
+      <div class="description">Take a photo using the back camera and return image data</div>
+      <button class="try-btn" onclick="fetchEndpoint('/camera/back', 'camera-back-response')">Try it</button>
+      <div id="camera-back-response" class="response">
+        <div class="response-header">
+          <span>Response:</span>
+          <button class="close-btn" onclick="closeResponse('camera-back-response')">Close</button>
+        </div>
+        <pre></pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
       <div><span class="method">GET</span> <span class="path">/flashlight</span></div>
-      <div class="description">Toggle the device's flashlight</div>
+      <div class="description">Toggle the device flashlight</div>
       <button class="try-btn" onclick="fetchEndpoint('/flashlight', 'flashlight-response')">Try it</button>
       <div id="flashlight-response" class="response">
         <div class="response-header">

@@ -46,6 +46,10 @@ dependencies:
   sensors_plus: ^4.0.2
   torch_light: ^1.0.0
   shelf_swagger_ui: ^1.0.0+2
+  geolocator: ^10.1.1
+  camera: ^0.10.5+9
+  path_provider: ^2.1.2
+  http: ^1.2.0
 
 dev_dependencies:
   flutter_test:

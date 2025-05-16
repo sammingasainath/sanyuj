@@ -8,6 +8,8 @@ import 'package:sensor_api/domain/entities/additional_sensors.dart';
 import 'package:sensor_api/domain/usecases/get_sensor_data.dart';
 import 'package:sensor_api/data/services/flashlight_service.dart';
 import 'package:sensor_api/data/services/api_docs_service.dart';
+import 'package:sensor_api/domain/usecases/get_gps_data.dart';
+import 'package:sensor_api/domain/usecases/get_camera_data.dart';
 
 class ApiServer {
   final GetAccelerometerDataUseCase getAccelerometerData;
@@ -40,6 +42,10 @@ class ApiServer {
   final GetMagneticFieldUncalibratedDataUseCase?
   getMagneticFieldUncalibratedData;
   final GetGyroscopeUncalibratedDataUseCase? getGyroscopeUncalibratedData;
+
+  // Advanced sensor use cases
+  final GetGpsDataUseCase? getGpsData;
+  final GetCameraDataUseCase? getCameraData;
 
   // Flashlight service
   final FlashlightService _flashlightService = FlashlightService();
@@ -76,6 +82,9 @@ class ApiServer {
     this.getAccelerometerUncalibratedData,
     this.getMagneticFieldUncalibratedData,
     this.getGyroscopeUncalibratedData,
+    // Advanced sensor parameters
+    this.getGpsData,
+    this.getCameraData,
   });
 
   Future<void> start({String? host, int? port}) async {
@@ -321,6 +330,46 @@ class ApiServer {
               'Gyroscope uncalibrated sensor not supported',
               null,
             );
+          }
+        } else if (path == 'gps') {
+          if (getGpsData != null) {
+            final data = await getGpsData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(false, 'GPS sensor not supported', null);
+          }
+        } else if (path == 'camera') {
+          if (getCameraData != null) {
+            final data = await getCameraData!();
+            return _jsonResponse(true, 'Success', data?.toJson());
+          } else {
+            return _jsonResponse(false, 'Camera not supported', null);
+          }
+        } else if (path == 'camera/front') {
+          if (getCameraData != null) {
+            final data = await getCameraData!.takeFrontCameraPhoto();
+            return _jsonResponse(
+              data != null,
+              data != null
+                  ? 'Front camera photo captured'
+                  : 'Failed to capture front camera photo',
+              data?.toJson(),
+            );
+          } else {
+            return _jsonResponse(false, 'Camera not supported', null);
+          }
+        } else if (path == 'camera/back') {
+          if (getCameraData != null) {
+            final data = await getCameraData!.takeBackCameraPhoto();
+            return _jsonResponse(
+              data != null,
+              data != null
+                  ? 'Back camera photo captured'
+                  : 'Failed to capture back camera photo',
+              data?.toJson(),
+            );
+          } else {
+            return _jsonResponse(false, 'Camera not supported', null);
           }
         } else if (path == 'all') {
           final data = await getCombinedSensorData();

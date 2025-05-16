@@ -8,6 +8,7 @@ import 'package:sensor_api/domain/entities/sensor_data.dart';
 import 'package:sensor_api/domain/entities/additional_sensors.dart';
 import 'package:sensor_api/domain/repositories/sensor_repository.dart';
 import 'package:sensor_api/domain/usecases/get_sensor_data.dart';
+import 'package:sensor_api/presentation/providers/advanced_sensor_provider.dart';
 
 // DataSource provider
 final sensorDataSourceProvider = Provider<SensorDataSource>((ref) {
@@ -267,22 +268,9 @@ final apiServerProvider = Provider<ApiServer>((ref) {
     getGeomagneticRotationVectorData: ref.watch(
       getGeomagneticRotationVectorDataUseCaseProvider,
     ),
-    // New sensors
-    getSignificantMotionData: ref.watch(
-      getSignificantMotionDataUseCaseProvider,
-    ),
-    getStationaryDetectData: ref.watch(getStationaryDetectDataUseCaseProvider),
-    getWakeGestureData: ref.watch(getWakeGestureDataUseCaseProvider),
-    getPickupDetectData: ref.watch(getPickupDetectDataUseCaseProvider),
-    getAccelerometerUncalibratedData: ref.watch(
-      getAccelerometerUncalibratedDataUseCaseProvider,
-    ),
-    getMagneticFieldUncalibratedData: ref.watch(
-      getMagneticFieldUncalibratedDataUseCaseProvider,
-    ),
-    getGyroscopeUncalibratedData: ref.watch(
-      getGyroscopeUncalibratedDataUseCaseProvider,
-    ),
+    // Advanced sensors
+    getGpsData: ref.watch(getGpsDataUseCaseProvider),
+    getCameraData: ref.watch(getCameraDataUseCaseProvider),
   );
 });
 
