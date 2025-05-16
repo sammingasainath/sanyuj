@@ -1,0 +1,1171 @@
+openapi: 3.0.0
+info:
+  title: Sensor API
+  description: API for accessing various smartphone sensors and device controls
+  version: 1.0.0
+
+servers:
+  - url: http://{device-ip}:8080
+    description: Local device server
+    variables:
+      device-ip:
+        default: 'localhost'
+        description: The IP address of the device
+
+paths:
+  /sensors:
+    get:
+      summary: Get available sensors
+      description: Returns a list of all available sensors on the device
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SensorListResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /accelerometer:
+    get:
+      summary: Get accelerometer data
+      description: Returns the latest accelerometer sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccelerometerResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /gyroscope:
+    get:
+      summary: Get gyroscope data
+      description: Returns the latest gyroscope sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GyroscopeResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /magnetometer:
+    get:
+      summary: Get magnetometer data
+      description: Returns the latest magnetometer sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MagnetometerResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /proximity:
+    get:
+      summary: Get proximity data
+      description: Returns the latest proximity sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProximityResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /light:
+    get:
+      summary: Get light sensor data
+      description: Returns the latest ambient light sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LightResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /pressure:
+    get:
+      summary: Get pressure sensor data
+      description: Returns the latest barometric pressure sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PressureResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /stepcounter:
+    get:
+      summary: Get step counter data
+      description: Returns the latest step counter sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StepCounterResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /stepdetector:
+    get:
+      summary: Get step detector data
+      description: Returns the latest step detector sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StepDetectorResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /rotationvector:
+    get:
+      summary: Get rotation vector data
+      description: Returns the latest rotation vector sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RotationVectorResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /orientation:
+    get:
+      summary: Get orientation data
+      description: Returns the latest orientation sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrientationResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /gravity:
+    get:
+      summary: Get gravity data
+      description: Returns the latest gravity sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GravityResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /linearacceleration:
+    get:
+      summary: Get linear acceleration data
+      description: Returns the latest linear acceleration sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinearAccelerationResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /gamerotationvector:
+    get:
+      summary: Get game rotation vector data
+      description: Returns the latest game rotation vector sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameRotationVectorResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /geomagneticrotationvector:
+    get:
+      summary: Get geomagnetic rotation vector data
+      description: Returns the latest geomagnetic rotation vector sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeomagneticRotationVectorResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /significantmotion:
+    get:
+      summary: Get significant motion data
+      description: Returns whether significant motion was detected
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignificantMotionResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /stationarydetect:
+    get:
+      summary: Get stationary detect data
+      description: Returns whether the device is stationary
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationaryDetectResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /wakegesture:
+    get:
+      summary: Get wake gesture data
+      description: Returns whether a wake gesture was detected
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WakeGestureResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /pickupdetect:
+    get:
+      summary: Get pickup detect data
+      description: Returns whether a pickup gesture was detected
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PickupDetectResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /accelerometeruncalibrated:
+    get:
+      summary: Get uncalibrated accelerometer data
+      description: Returns the latest uncalibrated accelerometer sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccelerometerUncalibratedResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /magneticfielduncalibrated:
+    get:
+      summary: Get uncalibrated magnetic field data
+      description: Returns the latest uncalibrated magnetic field sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MagneticFieldUncalibratedResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /gyroscopeuncalibrated:
+    get:
+      summary: Get uncalibrated gyroscope data
+      description: Returns the latest uncalibrated gyroscope sensor readings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GyroscopeUncalibratedResponse'
+        '404':
+          description: Sensor not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /flashlight:
+    get:
+      summary: Toggle flashlight
+      description: Toggles the device's flashlight and returns the new state
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlashlightResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /all:
+    get:
+      summary: Get all sensor data
+      description: Returns data from all available sensors in a single response
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllSensorsResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    BaseResponse:
+      type: object
+      required:
+        - success
+        - message
+      properties:
+        success:
+          type: boolean
+          description: Whether the operation was successful
+        message:
+          type: string
+          description: A message describing the result of the operation
+
+    ErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: 'null'
+
+    SensorListResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: string
+                description: Name of an available sensor
+
+    AccelerometerResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                x:
+                  type: number
+                  format: float
+                  description: X-axis acceleration in m/s²
+                y:
+                  type: number
+                  format: float
+                  description: Y-axis acceleration in m/s²
+                z:
+                  type: number
+                  format: float
+                  description: Z-axis acceleration in m/s²
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    GyroscopeResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                x:
+                  type: number
+                  format: float
+                  description: X-axis rotation in rad/s
+                y:
+                  type: number
+                  format: float
+                  description: Y-axis rotation in rad/s
+                z:
+                  type: number
+                  format: float
+                  description: Z-axis rotation in rad/s
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    MagnetometerResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                x:
+                  type: number
+                  format: float
+                  description: X-axis magnetic field in µT
+                y:
+                  type: number
+                  format: float
+                  description: Y-axis magnetic field in µT
+                z:
+                  type: number
+                  format: float
+                  description: Z-axis magnetic field in µT
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    ProximityResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                distance:
+                  type: number
+                  format: float
+                  description: Distance in cm
+                isNear:
+                  type: boolean
+                  description: Whether an object is near the sensor
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    LightResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                illuminance:
+                  type: number
+                  format: float
+                  description: Light level in lux
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    PressureResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                pressure:
+                  type: number
+                  format: float
+                  description: Atmospheric pressure in hPa or mbar
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    StepCounterResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                steps:
+                  type: integer
+                  description: Number of steps taken since device boot
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    StepDetectorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                detected:
+                  type: boolean
+                  description: Whether a step was detected
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    RotationVectorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                x:
+                  type: number
+                  format: float
+                  description: X component of the rotation vector
+                y:
+                  type: number
+                  format: float
+                  description: Y component of the rotation vector
+                z:
+                  type: number
+                  format: float
+                  description: Z component of the rotation vector
+                w:
+                  type: number
+                  format: float
+                  description: Scalar component of the rotation vector
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    OrientationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                azimuth:
+                  type: number
+                  format: float
+                  description: Azimuth angle in degrees
+                pitch:
+                  type: number
+                  format: float
+                  description: Pitch angle in degrees
+                roll:
+                  type: number
+                  format: float
+                  description: Roll angle in degrees
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    GravityResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                x:
+                  type: number
+                  format: float
+                  description: X-axis gravity in m/s²
+                y:
+                  type: number
+                  format: float
+                  description: Y-axis gravity in m/s²
+                z:
+                  type: number
+                  format: float
+                  description: Z-axis gravity in m/s²
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    LinearAccelerationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                x:
+                  type: number
+                  format: float
+                  description: X-axis linear acceleration in m/s²
+                y:
+                  type: number
+                  format: float
+                  description: Y-axis linear acceleration in m/s²
+                z:
+                  type: number
+                  format: float
+                  description: Z-axis linear acceleration in m/s²
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    GameRotationVectorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                x:
+                  type: number
+                  format: float
+                  description: X component of the game rotation vector
+                y:
+                  type: number
+                  format: float
+                  description: Y component of the game rotation vector
+                z:
+                  type: number
+                  format: float
+                  description: Z component of the game rotation vector
+                w:
+                  type: number
+                  format: float
+                  description: Scalar component of the game rotation vector
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    GeomagneticRotationVectorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                x:
+                  type: number
+                  format: float
+                  description: X component of the geomagnetic rotation vector
+                y:
+                  type: number
+                  format: float
+                  description: Y component of the geomagnetic rotation vector
+                z:
+                  type: number
+                  format: float
+                  description: Z component of the geomagnetic rotation vector
+                w:
+                  type: number
+                  format: float
+                  description: Scalar component of the geomagnetic rotation vector
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    SignificantMotionResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                detected:
+                  type: boolean
+                  description: Whether significant motion was detected
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    StationaryDetectResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                isStationary:
+                  type: boolean
+                  description: Whether the device is stationary
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    WakeGestureResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                detected:
+                  type: boolean
+                  description: Whether a wake gesture was detected
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    PickupDetectResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                detected:
+                  type: boolean
+                  description: Whether a pickup gesture was detected
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    AccelerometerUncalibratedResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                x:
+                  type: number
+                  format: float
+                  description: X-axis uncalibrated acceleration in m/s²
+                y:
+                  type: number
+                  format: float
+                  description: Y-axis uncalibrated acceleration in m/s²
+                z:
+                  type: number
+                  format: float
+                  description: Z-axis uncalibrated acceleration in m/s²
+                xBias:
+                  type: number
+                  format: float
+                  description: X-axis bias in m/s²
+                yBias:
+                  type: number
+                  format: float
+                  description: Y-axis bias in m/s²
+                zBias:
+                  type: number
+                  format: float
+                  description: Z-axis bias in m/s²
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    MagneticFieldUncalibratedResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                x:
+                  type: number
+                  format: float
+                  description: X-axis uncalibrated magnetic field in µT
+                y:
+                  type: number
+                  format: float
+                  description: Y-axis uncalibrated magnetic field in µT
+                z:
+                  type: number
+                  format: float
+                  description: Z-axis uncalibrated magnetic field in µT
+                xBias:
+                  type: number
+                  format: float
+                  description: X-axis bias in µT
+                yBias:
+                  type: number
+                  format: float
+                  description: Y-axis bias in µT
+                zBias:
+                  type: number
+                  format: float
+                  description: Z-axis bias in µT
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    GyroscopeUncalibratedResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                x:
+                  type: number
+                  format: float
+                  description: X-axis uncalibrated rotation in rad/s
+                y:
+                  type: number
+                  format: float
+                  description: Y-axis uncalibrated rotation in rad/s
+                z:
+                  type: number
+                  format: float
+                  description: Z-axis uncalibrated rotation in rad/s
+                xDrift:
+                  type: number
+                  format: float
+                  description: X-axis drift in rad/s
+                yDrift:
+                  type: number
+                  format: float
+                  description: Y-axis drift in rad/s
+                zDrift:
+                  type: number
+                  format: float
+                  description: Z-axis drift in rad/s
+                timestamp:
+                  type: string
+                  format: date-time
+                  description: Time when the reading was taken
+                tenantId:
+                  type: string
+                  description: Tenant identifier
+
+    FlashlightResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                result:
+                  type: boolean
+                  description: The current state of the flashlight (true = on, false = off)
+
+    AllSensorsResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              additionalProperties: true
+              description: An object containing data from all available sensors 

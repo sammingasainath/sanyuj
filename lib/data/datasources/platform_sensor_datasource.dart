@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/services.dart';
@@ -207,33 +206,16 @@ class PlatformSensorDataSource implements SensorDataSource {
 
   Future<void> _checkSensorAvailability() async {
     try {
-      // Check sensors_plus sensors
-      try {
-        await accelerometerEventStream().first.timeout(
-          const Duration(milliseconds: 500),
-        );
-        _accelerometerAvailable = true;
-      } catch (e) {
-        _logger.warning('Accelerometer not available: $e');
-      }
+      // Set basic sensors to available by default
+      _accelerometerAvailable = true;
+      _gyroscopeAvailable = true;
+      _magnetometerAvailable = true;
 
-      try {
-        await gyroscopeEventStream().first.timeout(
-          const Duration(milliseconds: 500),
-        );
-        _gyroscopeAvailable = true;
-      } catch (e) {
-        _logger.warning('Gyroscope not available: $e');
-      }
-
-      try {
-        await magnetometerEventStream().first.timeout(
-          const Duration(milliseconds: 500),
-        );
-        _magnetometerAvailable = true;
-      } catch (e) {
-        _logger.warning('Magnetometer not available: $e');
-      }
+      // Log the availability status
+      _logger.info('Basic sensors set to available by default');
+      _logger.info('- Accelerometer: $_accelerometerAvailable');
+      _logger.info('- Gyroscope: $_gyroscopeAvailable');
+      _logger.info('- Magnetometer: $_magnetometerAvailable');
 
       // Check platform sensors
       final availablePlatformSensors =
@@ -566,92 +548,44 @@ class PlatformSensorDataSource implements SensorDataSource {
 
   @override
   Stream<AccelerometerData> getAccelerometerStream() {
-    if (_accelerometerAvailable) {
-      return accelerometerEventStream().map(
-        (event) => AccelerometerData(
-          x: event.x,
-          y: event.y,
-          z: event.z,
-          timestamp: DateTime.now(),
-          tenantId: 'default',
-        ),
-      );
-    } else {
-      // Return mock stream if sensor is not available
-      final controller = StreamController<AccelerometerData>.broadcast();
-      Timer.periodic(const Duration(milliseconds: 200), (timer) {
-        controller.add(
-          AccelerometerData(
-            x: 0.5 * DateTime.now().second % 10,
-            y: 1.5 * DateTime.now().second % 5,
-            z: 9.8 + 0.1 * (DateTime.now().millisecond % 10),
-            timestamp: DateTime.now(),
-            tenantId: 'default',
-          ),
-        );
-      });
-      return controller.stream;
-    }
+    // Always use the real accelerometer sensor stream
+    return accelerometerEventStream().map(
+      (event) => AccelerometerData(
+        x: event.x,
+        y: event.y,
+        z: event.z,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      ),
+    );
   }
 
   @override
   Stream<GyroscopeData> getGyroscopeStream() {
-    if (_gyroscopeAvailable) {
-      return gyroscopeEventStream().map(
-        (event) => GyroscopeData(
-          x: event.x,
-          y: event.y,
-          z: event.z,
-          timestamp: DateTime.now(),
-          tenantId: 'default',
-        ),
-      );
-    } else {
-      // Return mock stream if sensor is not available
-      final controller = StreamController<GyroscopeData>.broadcast();
-      Timer.periodic(const Duration(milliseconds: 200), (timer) {
-        controller.add(
-          GyroscopeData(
-            x: 0.01 * DateTime.now().second % 10,
-            y: 0.02 * DateTime.now().second % 5,
-            z: 0.03 * (DateTime.now().millisecond % 10),
-            timestamp: DateTime.now(),
-            tenantId: 'default',
-          ),
-        );
-      });
-      return controller.stream;
-    }
+    // Always use the real gyroscope sensor stream
+    return gyroscopeEventStream().map(
+      (event) => GyroscopeData(
+        x: event.x,
+        y: event.y,
+        z: event.z,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      ),
+    );
   }
 
   @override
   Stream<MagnetometerData> getMagnetometerStream() {
-    if (_magnetometerAvailable) {
-      return magnetometerEventStream().map(
-        (event) => MagnetometerData(
-          x: event.x,
-          y: event.y,
-          z: event.z,
-          timestamp: DateTime.now(),
-          tenantId: 'default',
-        ),
-      );
-    } else {
-      // Return mock stream if sensor is not available
-      final controller = StreamController<MagnetometerData>.broadcast();
-      Timer.periodic(const Duration(milliseconds: 200), (timer) {
-        controller.add(
-          MagnetometerData(
-            x: 25 + 5 * DateTime.now().second % 10,
-            y: 40 + 3 * DateTime.now().second % 5,
-            z: 10 + 2 * (DateTime.now().millisecond % 10),
-            timestamp: DateTime.now(),
-            tenantId: 'default',
-          ),
-        );
-      });
-      return controller.stream;
-    }
+    // Always use the real magnetometer sensor stream
+    return magnetometerEventStream().map(
+      (event) => MagnetometerData(
+        x: event.x,
+        y: event.y,
+        z: event.z,
+        timestamp: DateTime.now(),
+        tenantId: 'default',
+      ),
+    );
   }
 
   @override
@@ -671,68 +605,41 @@ class PlatformSensorDataSource implements SensorDataSource {
 
   @override
   Future<AccelerometerData> getAccelerometerData() async {
-    if (_accelerometerAvailable) {
-      final event = await accelerometerEventStream().first;
-      return AccelerometerData(
-        x: event.x,
-        y: event.y,
-        z: event.z,
-        timestamp: DateTime.now(),
-        tenantId: 'default',
-      );
-    } else {
-      return AccelerometerData(
-        x: 0.5,
-        y: 1.5,
-        z: 9.8,
-        timestamp: DateTime.now(),
-        tenantId: 'default',
-      );
-    }
+    // Always use the real accelerometer data
+    final event = await accelerometerEventStream().first;
+    return AccelerometerData(
+      x: event.x,
+      y: event.y,
+      z: event.z,
+      timestamp: DateTime.now(),
+      tenantId: 'default',
+    );
   }
 
   @override
   Future<GyroscopeData> getGyroscopeData() async {
-    if (_gyroscopeAvailable) {
-      final event = await gyroscopeEventStream().first;
-      return GyroscopeData(
-        x: event.x,
-        y: event.y,
-        z: event.z,
-        timestamp: DateTime.now(),
-        tenantId: 'default',
-      );
-    } else {
-      return GyroscopeData(
-        x: 0.01,
-        y: 0.02,
-        z: 0.03,
-        timestamp: DateTime.now(),
-        tenantId: 'default',
-      );
-    }
+    // Always use the real gyroscope data
+    final event = await gyroscopeEventStream().first;
+    return GyroscopeData(
+      x: event.x,
+      y: event.y,
+      z: event.z,
+      timestamp: DateTime.now(),
+      tenantId: 'default',
+    );
   }
 
   @override
   Future<MagnetometerData> getMagnetometerData() async {
-    if (_magnetometerAvailable) {
-      final event = await magnetometerEventStream().first;
-      return MagnetometerData(
-        x: event.x,
-        y: event.y,
-        z: event.z,
-        timestamp: DateTime.now(),
-        tenantId: 'default',
-      );
-    } else {
-      return MagnetometerData(
-        x: 25.0,
-        y: 40.0,
-        z: 10.0,
-        timestamp: DateTime.now(),
-        tenantId: 'default',
-      );
-    }
+    // Always use the real magnetometer data
+    final event = await magnetometerEventStream().first;
+    return MagnetometerData(
+      x: event.x,
+      y: event.y,
+      z: event.z,
+      timestamp: DateTime.now(),
+      tenantId: 'default',
+    );
   }
 
   @override
@@ -836,10 +743,10 @@ class PlatformSensorDataSource implements SensorDataSource {
   Future<List<String>> getAvailableSensors() async {
     final List<String> sensorList = [];
 
-    // Add the sensors from sensors_plus
-    if (_accelerometerAvailable) sensorList.add('Accelerometer');
-    if (_gyroscopeAvailable) sensorList.add('Gyroscope');
-    if (_magnetometerAvailable) sensorList.add('Magnetometer');
+    // Basic sensors are always available
+    sensorList.add('Accelerometer');
+    sensorList.add('Gyroscope');
+    sensorList.add('Magnetometer');
 
     // For proximity sensor, show correct status
     if (_proximityAvailable && _proximityWorking) {

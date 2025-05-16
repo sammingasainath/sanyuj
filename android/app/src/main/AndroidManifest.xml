@@ -8,6 +8,11 @@
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <!-- Wake lock permission for keeping sensors alive -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Camera permission for flashlight control -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
     <!-- Sensors permissions are automatically included with the sensors_plus package -->
     
     <application

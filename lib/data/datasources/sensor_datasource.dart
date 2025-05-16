@@ -6,6 +6,8 @@ import 'package:sensor_api/domain/entities/additional_sensors.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 
+// Remove the redefinition of sensor streams as they're already defined in sensors_plus
+
 abstract class SensorDataSource {
   // Basic sensors
   Stream<AccelerometerData> getAccelerometerStream();

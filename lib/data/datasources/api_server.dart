@@ -6,6 +6,8 @@ import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:sensor_api/domain/entities/sensor_data.dart';
 import 'package:sensor_api/domain/entities/additional_sensors.dart';
 import 'package:sensor_api/domain/usecases/get_sensor_data.dart';
+import 'package:sensor_api/data/services/flashlight_service.dart';
+import 'package:sensor_api/data/services/api_docs_service.dart';
 
 class ApiServer {
   final GetAccelerometerDataUseCase getAccelerometerData;
@@ -38,6 +40,12 @@ class ApiServer {
   final GetMagneticFieldUncalibratedDataUseCase?
   getMagneticFieldUncalibratedData;
   final GetGyroscopeUncalibratedDataUseCase? getGyroscopeUncalibratedData;
+
+  // Flashlight service
+  final FlashlightService _flashlightService = FlashlightService();
+
+  // API documentation service
+  final ApiDocsService _apiDocsService = ApiDocsService();
 
   HttpServer? _server;
   String _host = '0.0.0.0';
@@ -81,6 +89,7 @@ class ApiServer {
 
     _server = await shelf_io.serve(handler, _host, _port);
     print('Server running on http://$_host:$_port');
+    print('API documentation available at http://$_host:$_port/docs');
   }
 
   Future<void> stop() async {
@@ -105,13 +114,18 @@ class ApiServer {
         return null;
       },
       responseHandler: (response) {
-        return response.change(
-          headers: {
-            ...response.headers,
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-          },
-        );
+        // Don't override Content-Type if it's already set (for HTML responses)
+        final headers = {
+          ...response.headers,
+          'Access-Control-Allow-Origin': '*',
+        };
+
+        // Only set JSON Content-Type for responses that don't already have a Content-Type
+        if (!response.headers.containsKey('Content-Type')) {
+          headers['Content-Type'] = 'application/json';
+        }
+
+        return response.change(headers: headers);
       },
     );
   }
@@ -119,6 +133,11 @@ class ApiServer {
   Handler _router() {
     return (request) async {
       final path = request.url.path;
+
+      // Serve API documentation at /docs endpoint
+      if (path == 'docs' || path.startsWith('docs/')) {
+        return _apiDocsService.getDocsHandler()(request);
+      }
 
       try {
         if (path == 'sensors') {
@@ -306,6 +325,9 @@ class ApiServer {
         } else if (path == 'all') {
           final data = await getCombinedSensorData();
           return _jsonResponse(true, 'Success', data.toJson());
+        } else if (path == 'flashlight') {
+          final result = await _flashlightService.toggleFlashlight();
+          return _jsonResponse(true, 'Success', {'result': result});
         } else {
           return _jsonResponse(false, 'Endpoint not found', null);
         }
